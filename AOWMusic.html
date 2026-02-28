@@ -5,280 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article of the Week: Stress Less, Listen More</title>
     <style>
-        /* --- CORE THEME: CYBERPUNK NEON --- */
         :root {
-            --bg-dark: #0d0e15;
-            --panel-dark: #1a1c29;
-            --text-main: #e2e8f0;
-            --text-muted: #a0aec0;
-            --neon-cyan: #00f3ff;
-            --neon-purple: #bc13fe;
-            --neon-pink: #ff007f;
-            --highlight-color: #ffea00;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --font-size-base: 18px;
+            --bg-dark: #0d0e15; --panel-dark: #1a1c29; --text-main: #e2e8f0; --text-muted: #a0aec0;
+            --neon-cyan: #00f3ff; --neon-purple: #bc13fe; --neon-pink: #ff007f; --highlight-color: #ffea00;
+            --font-main: 'Segoe UI', sans-serif; --font-size-base: 18px;
         }
-
-        /* --- HIGH CONTRAST OVERRIDES --- */
-        body.high-contrast {
-            --bg-dark: #ffffff;
-            --panel-dark: #ffffff;
-            --text-main: #000000;
-            --text-muted: #333333;
-            --neon-cyan: #0000ee;
-            --neon-purple: #551a8b;
-            --neon-pink: #d90000;
-            --highlight-color: #ffff00;
-        }
-        body.high-contrast .container {
-            box-shadow: none;
-            border: 2px solid #000;
-        }
-
-        /* --- DYSLEXIA FONT OVERRIDE --- */
-        body.dyslexia-font {
-            --font-main: 'Comic Sans MS', 'Arial', sans-serif !important;
-        }
-
-        body {
-            font-family: var(--font-main);
-            font-size: var(--font-size-base);
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.8;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* Progress Bar */
-        #progress-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 6px;
-            background: rgba(255,255,255,0.1); z-index: 9999;
-        }
-        #progress-bar {
-            height: 100%; width: 0%;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
-        }
-
-        /* Reading Ruler */
-        #reading-ruler {
-            display: none; position: fixed; left: 0; width: 100%; height: 40px;
-            background: rgba(0, 243, 255, 0.15); border-top: 2px solid var(--neon-cyan);
-            border-bottom: 2px solid var(--neon-cyan); pointer-events: none;
-            z-index: 9998; transform: translateY(-50%);
-        }
-
-        .container {
-            max-width: 1100px; margin: 0 auto; background-color: var(--panel-dark);
-            padding: 40px; border-radius: 12px; box-shadow: 0 0 25px rgba(188, 19, 254, 0.15);
-        }
-
-        /* Accessibility Panel */
-        .access-panel {
-            display: flex; flex-wrap: wrap; gap: 10px; background: rgba(255,255,255,0.05);
-            padding: 15px; border-radius: 8px; margin-bottom: 25px; justify-content: center;
-            border: 1px dashed var(--neon-cyan);
-        }
-        .access-btn {
-            background: transparent; color: var(--text-main); border: 1px solid var(--neon-purple);
-            padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;
-        }
-        .access-btn:hover, .access-btn.active { background: var(--neon-purple); color: #fff; }
-
-        h1, h2, h3 { color: var(--neon-cyan); margin-bottom: 10px; }
-        h1 { border-bottom: 2px solid var(--neon-cyan); padding-bottom: 10px; }
-        h2 { color: var(--neon-purple); border-bottom: 1px solid var(--neon-purple); }
-        .author-line { font-style: italic; color: var(--text-muted); margin-bottom: 20px; }
-
-        .header-info {
-            display: flex; justify-content: space-between; gap: 15px;
-            background: rgba(0, 243, 255, 0.05); padding: 15px; border-radius: 8px; font-weight: bold; margin-bottom: 20px;
-        }
-        .header-info input {
-            background: transparent; border: none; border-bottom: 2px solid var(--neon-cyan);
-            color: var(--text-main); font-size: 1.1rem; outline: none; font-family: inherit;
-        }
-
-        /* Textareas & Ghost Divs */
-        textarea {
-            width: 100%; background-color: #ffffff; color: #000000; border: 3px solid var(--neon-purple);
-            border-radius: 6px; padding: 12px; font-family: inherit; font-size: 1rem;
-            resize: none; overflow: hidden; box-sizing: border-box; min-height: 60px;
-        }
-        
-        .print-box {
-            display: none; white-space: pre-wrap; font-family: inherit; font-size: 1rem;
-            line-height: 1.8; color: black; background: white;
-        }
-
-        /* Side-by-Side Grid */
-        .article-row {
-            display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 40px; align-items: flex-start;
-        }
-        .article-text p { margin-top: 0; margin-bottom: 15px; }
+        body { font-family: var(--font-main); font-size: var(--font-size-base); background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 40px 20px; line-height: 1.8; }
+        .container { max-width: 1100px; margin: 0 auto; background-color: var(--panel-dark); padding: 40px; border-radius: 12px; box-shadow: 0 0 25px rgba(188, 19, 254, 0.15); }
+        .access-panel { display: flex; flex-wrap: wrap; gap: 10px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-bottom: 25px; justify-content: center; border: 1px dashed var(--neon-cyan); }
+        .access-btn { background: transparent; color: var(--text-main); border: 1px solid var(--neon-purple); padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        h1, h2 { color: var(--neon-cyan); border-bottom: 2px solid var(--neon-cyan); padding-bottom: 10px; }
+        textarea { width: 100%; background-color: #ffffff; color: #000000; border: 3px solid var(--neon-purple); border-radius: 6px; padding: 12px; font-family: inherit; font-size: 1rem; resize: none; min-height: 60px; margin-bottom: 10px; }
+        .article-row { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 40px; align-items: flex-start; }
         .para-num { color: var(--neon-pink); font-weight: bold; margin-right: 5px; }
-
-        /* Embedded Elements */
-        .embedded-box {
-            background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-cyan);
-            padding: 20px; border-radius: 8px; margin: 20px 0;
-        }
-        .btn {
-            background: transparent; color: var(--neon-cyan); border: 2px solid var(--neon-cyan);
-            padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px;
-        }
-        .btn:hover { background: var(--neon-cyan); color: #000; }
-        .tts-btn {
-            background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink);
-            border-radius: 4px; cursor: pointer; margin-right: 8px; padding: 2px 5px;
-        }
-
-        /* Hints & Feedback */
-        .hint-box {
-            display: none; background: rgba(255, 0, 127, 0.1); padding: 15px;
-            border-left: 3px solid var(--neon-pink); margin: 10px 0; font-size: 0.95rem;
-        }
-        .feedback-msg { margin-top: 10px; font-weight: bold; display: none; padding: 10px; border-radius: 5px; }
-        .feedback-correct { background: rgba(0, 255, 0, 0.1); color: #00cc00; border: 1px solid #00cc00; }
-        .feedback-incorrect { background: rgba(255, 0, 0, 0.1); color: #ff3333; border: 1px solid #ff3333; }
-
+        .embedded-box { background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .btn { background: transparent; color: var(--neon-cyan); border: 2px solid var(--neon-cyan); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
         img { max-width: 100%; border-radius: 8px; border: 2px solid var(--neon-cyan); margin: 15px 0; }
-        .highlighted { background-color: var(--highlight-color); color: #000; cursor: pointer; border-radius: 3px; }
-        #highlight-popup { display: none; position: absolute; background: var(--highlight-color); color: black; padding: 6px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; z-index: 1000; }
-
-        /* --- PDF EXPORT --- */
+        .print-box { display: none; white-space: pre-wrap; color: black; background: white; padding: 10px; border: 1px solid #000; }
         @media print {
-            body, .container { background: #fff !important; color: #000 !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; width: 100% !important; }
-            h1, h2, h3, p, span, div { color: #000 !important; text-shadow: none !important; border-color: #000 !important; }
-            .article-row { display: grid !important; grid-template-columns: 2fr 1fr !important; page-break-inside: avoid !important; align-items: start !important; }
             textarea { display: none !important; }
-            .print-box { display: block !important; border: 2px solid #000 !important; padding: 12px !important; border-radius: 6px !important; width: 100% !important; box-sizing: border-box !important; }
-            .btn, .tts-btn, .access-panel, #progress-container, #reading-ruler { display: none !important; }
-            img { max-width: 80% !important; display: block; margin: 0 auto; }
+            .print-box { display: block !important; }
+            .access-panel, .btn, #lock-screen { display: none !important; }
         }
     </style>
 </head>
-<body> 
+<body>
+
 <div id="lock-screen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <h2 style="color: var(--neon-cyan); margin-bottom: 20px;">Class Assignment Locked</h2>
-    <p style="color: var(--text-muted); margin-bottom: 20px;">Please enter the class passcode to begin.</p>
-    <input type="password" id="pass-input" placeholder="Enter Passcode..." style="padding: 12px; font-size: 1.2rem; border: 3px solid var(--neon-purple); border-radius: 8px; background: #000; color: #fff; text-align: center; margin-bottom: 15px; outline: none;">
-    <button class="btn" style="font-size: 1.2rem;" onclick="checkPassword()">Unlock</button>
-    <p id="pass-error" style="color: var(--neon-pink); display: none; font-weight: bold; margin-top: 15px;">Incorrect Passcode. Try again.</p>
+    <h2 style="color: var(--neon-cyan);">Class Assignment Locked</h2>
+    <input type="password" id="pass-input" placeholder="Passcode is music" style="padding: 12px; border-radius: 8px; text-align: center;">
+    <button class="btn" style="margin-top:10px;" onclick="checkPassword()">Unlock</button>
 </div>
 
-<div id="progress-container"><div id="progress-bar"></div></div>
-<div id="reading-ruler"></div>
-<div id="highlight-popup">Highlight</div>
-
-<div class="container" id="assignment-container">
+<div class="container">
     <div class="access-panel">
-        <span style="color: var(--text-muted); line-height: 2;">Accessibility:</span>
-        <button class="access-btn" onclick="adjustFontSize(-2)">A-</button>
-        <button class="access-btn" onclick="adjustFontSize(2)">A+</button>
-        <button class="access-btn" id="btn-dyslexia" onclick="toggleDyslexia()">Dyslexia Font</button>
-        <button class="access-btn" id="btn-contrast" onclick="toggleContrast()">High Contrast</button>
-        <button class="access-btn" id="btn-ruler" onclick="toggleRuler()">Reading Ruler</button>
-    </div>
-
-    <div class="header-info">
-        <div>Name: <input type="text" id="student-name" class="auto-save-input" placeholder="Type here..."></div>
-        <div>Period: <input type="text" id="student-period" class="auto-save-input" size="5"></div>
-        <div>Date: <span id="auto-date"></span></div>
+        <button class="access-btn" onclick="document.body.style.fontSize='22px'">Larger Text</button>
+        <button class="access-btn" onclick="document.body.style.backgroundColor='#fff'; document.body.style.color='#000'">High Contrast</button>
     </div>
 
     <h1>Article of the Week: Stress Less, Listen More</h1>
-    <p class="author-line">Can music really help reduce our stress? | By Carlos Ramirez, Aenews.org</p>
+    <p>By Carlos Ramirez | Aenews.org</p>
 
-    <h2>Pre-reading Engagement</h2>
-    <p>How does music play a role in your daily life, and do you feel it affects your mood?</p>
-    <textarea id="journal-response" class="auto-save-input" placeholder="Type your thoughts here..."></textarea>
-    
-    <hr style="border-color: #333; margin: 40px 0;">
+    <h2>Pre-reading</h2>
+    <p>How does music affect your mood?</p>
+    <textarea id="pre-read" class="auto-save"></textarea>
 
     <div class="article-row">
-        <div class="article-text savable-content" id="content-block-1">
-            <p><button class="tts-btn">🔊</button><span class="para-num">[1]</span> At any given moment when you press play on your favorite song, your body might already be starting to relax. Music is more than just entertainment, it can actually lower our stress levels.</p>
-            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800" alt="Music Banner">
-            <p><button class="tts-btn">🔊</button><span class="para-num">[2]</span> In a world where stress has become a part of the daily life for students, workers, and family, something as accessible as music could be one of the most powerful tools to help manage it.</p>
+        <div>
+            <p><span class="para-num">[1]</span> Music is more than just entertainment; it can lower stress levels.</p>
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800" alt="Microphone">
+            <p><span class="para-num">[2]</span> It is a powerful tool for students and workers.</p>
+            <p><span class="para-num">[3]</span> Academic pressure makes stress common today.</p>
+            <p><span class="para-num">[4]</span> The ANA states music relieves anxiety and encourages creativity.</p>
         </div>
-        <textarea id="t4-box-1" class="auto-save-input" placeholder="Notes for paragraphs 1-2..."></textarea>
-    </div>
-
-    <div class="article-row">
-        <div class="article-text savable-content" id="content-block-2">
-            <p><button class="tts-btn">🔊</button><span class="para-num">[3]</span> Stress has become increasingly common in our everyday routines. With academic pressure and the rise of social media, many people experience mental health issues.</p>
-            <p><button class="tts-btn">🔊</button><span class="para-num">[4]</span> According to ANA (American Nurses Association), “When you incorporate more music into your life, it can help relieve anxiety, provide an emotional release, help you focus on the present moment, pull away from stressors, encourage creativity, and increase connection.”</p>
-        </div>
-        <textarea id="t4-box-2" class="auto-save-input" placeholder="Notes for paragraphs 3-4..."></textarea>
+        <textarea placeholder="Notes for 1-4..." class="auto-save"></textarea>
     </div>
 
     <div class="article-row">
-        <div class="article-text savable-content" id="content-block-3">
-            <img src="https://images.unsplash.com/photo-1514525253361-b8748b43a553?auto=format&fit=crop&q=80&w=800" alt="Music Illustration">
-            <p><button class="tts-btn">🔊</button><span class="para-num">[5]</span> Not only does music improve our mental health, but it also allows us to build strong connections with others who find similar music taste.</p>
+        <div>
+            <p><span class="para-num">[5]</span> Music builds strong connections between people.</p>
+            <div class="embedded-box">
+                <h3>The 5Cs: Connection</h3>
+                <p>How do shared tastes build relationships?</p>
+                <textarea class="auto-save"></textarea>
+            </div>
+            <p><span class="para-num">[6]</span> It helps dementia patients remember their lives.</p>
+            <p><span class="para-num">[7]</span> It serves as a healthy outlet for processed feelings.</p>
         </div>
-        <textarea id="t4-box-3" class="auto-save-input" placeholder="Notes for paragraph 5..."></textarea>
+        <textarea placeholder="Notes for 5-7..." class="auto-save"></textarea>
     </div>
 
-    <div style="text-align: center; margin-top: 50px;">
-        <button class="btn" style="font-size: 1.3rem; padding: 15px 50px;" onclick="exportPDF()">📥 Final Submit (Save as PDF)</button>
+    <div class="article-row">
+        <div>
+            <img src="https://images.unsplash.com/photo-1514525253361-b8748b43a553?w=800" alt="Concert">
+            <p><span class="para-num">[8]</span> A poll of 118 people showed 98% found music relieving.</p>
+            <p><span class="para-num">[9]</span> Music is cost-effective compared to therapy.</p>
+            <p><span class="para-num">[10]</span> It's an affordable strategy for society.</p>
+            <p><span class="para-num">[11]</span> The right music manages mental health.</p>
+            <p><span class="para-num">[12]</span> Sometimes the solution is as easy as pressing play.</p>
+        </div>
+        <textarea placeholder="Notes for 8-12..." class="auto-save"></textarea>
     </div>
 
+    <h2>CER Response</h2>
+    <p>Does music have a significant impact on stress? Use evidence.</p>
+    <textarea id="cer" class="auto-save" style="min-height:150px;"></textarea>
+
+    <div style="text-align: center;">
+        <button class="btn" onclick="window.print()">📥 Save as PDF</button>
+    </div>
 </div>
 
 <script>
     function checkPassword() {
-        const correctPassword = "music"; 
-        const userInput = document.getElementById('pass-input').value.trim().toLowerCase();
-        if (userInput === correctPassword) {
+        if(document.getElementById('pass-input').value.toLowerCase() === "music") {
             document.getElementById('lock-screen').style.display = 'none';
-            document.body.style.overflow = "auto"; 
-        } else {
-            document.getElementById('pass-error').style.display = 'block';
-            document.getElementById('pass-input').value = "";
+            document.body.style.overflow = "auto";
         }
     }
     document.body.style.overflow = "hidden";
-    document.getElementById('auto-date').innerText = new Date().toLocaleDateString();
-
-    let currentFontSize = 18;
-    function adjustFontSize(change) {
-        currentFontSize += change;
-        document.body.style.setProperty('--font-size-base', currentFontSize + 'px');
-    }
-
-    function toggleDyslexia() { document.body.classList.toggle('dyslexia-font'); }
-    function toggleContrast() { document.body.classList.toggle('high-contrast'); }
-
-    let rulerActive = false;
-    const ruler = document.getElementById('reading-ruler');
-    function toggleRuler() {
-        rulerActive = !rulerActive;
-        ruler.style.display = rulerActive ? 'block' : 'none';
-    }
-    document.addEventListener('mousemove', (e) => { if (rulerActive) ruler.style.top = e.clientY + 'px'; });
-
-    window.onscroll = function() {
-        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        document.getElementById("progress-bar").style.width = ((winScroll / height) * 100) + "%";
-    };
-
-    function exportPDF() {
-        document.querySelectorAll('input[type="text"]').forEach(el => el.setAttribute('value', el.value));
-        document.querySelectorAll('textarea').forEach(el => {
-            let div = document.createElement('div');
-            div.className = 'print-box';
-            div.innerText = el.value || " "; 
-            el.parentNode.insertBefore(div, el.nextSibling);
+    
+    // Auto-save logic
+    document.querySelectorAll('.auto-save').forEach(el => {
+        el.value = localStorage.getItem(el.id || el.placeholder) || "";
+        el.addEventListener('input', () => {
+            localStorage.setItem(el.id || el.placeholder, el.value);
         });
-        setTimeout(() => { window.print(); }, 300);
-    }
-
-    window.addEventListener('afterprint', () => {
-        document.querySelectorAll('.print-box').forEach(el => el.remove());
     });
 </script>
 </body>
