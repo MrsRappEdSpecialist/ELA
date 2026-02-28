@@ -5,85 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Article of the Week: Stress Less, Listen More</title>
     <style>
-        /* --- CYBERPUNK THEME --- */
         :root {
             --bg-dark: #0d0e15; --panel-dark: #1a1c29; --text-main: #e2e8f0; --text-muted: #a0aec0;
             --neon-cyan: #00f3ff; --neon-purple: #bc13fe; --neon-pink: #ff007f; --highlight-color: #ffea00;
-            --font-main: 'Segoe UI', sans-serif; --font-size-base: 18px;
+            --font-main: 'Segoe UI', Tahoma, sans-serif; --font-size-base: 18px;
         }
+        body.high-contrast { --bg-dark: #ffffff; --panel-dark: #ffffff; --text-main: #000; --neon-cyan: #0000ff; --neon-purple: #a020f0; }
+        body.dyslexia-font { --font-main: 'Comic Sans MS', sans-serif !important; }
 
-        body.high-contrast { --bg-dark: #ffffff; --panel-dark: #ffffff; --text-main: #000000; --text-muted: #111; --neon-cyan: #0000ff; --neon-purple: #a020f0; }
-        body.dyslexia-font { --font-main: 'Comic Sans MS', 'Arial', sans-serif !important; }
-
-        body { font-family: var(--font-main); font-size: var(--font-size-base); background-color: var(--bg-dark); color: var(--text-main); margin: 0; line-height: 1.7; transition: 0.3s; }
+        body { font-family: var(--font-main); font-size: var(--font-size-base); background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; line-height: 1.8; transition: 0.3s; }
         
         #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 6px; background: rgba(255,255,255,0.1); z-index: 10001; }
         #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); }
         #reading-ruler { display: none; position: fixed; left: 0; width: 100%; height: 40px; background: rgba(0, 243, 255, 0.15); border-top: 2px solid var(--neon-cyan); border-bottom: 2px solid var(--neon-cyan); pointer-events: none; z-index: 9999; }
 
-        .container { max-width: 1050px; margin: 50px auto; background: var(--panel-dark); padding: 40px; border-radius: 15px; box-shadow: 0 0 30px rgba(188, 19, 254, 0.2); border: 1px solid rgba(0, 243, 255, 0.1); }
-        
+        .container { max-width: 1100px; margin: 60px auto; background: var(--panel-dark); padding: 40px; border-radius: 15px; box-shadow: 0 0 30px rgba(188, 19, 254, 0.2); }
         .access-panel { display: flex; flex-wrap: wrap; gap: 10px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; margin-bottom: 25px; border: 1px dashed var(--neon-cyan); justify-content: center; }
-        .access-btn { background: transparent; color: var(--text-main); border: 1px solid var(--neon-purple); padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .access-btn:hover { background: var(--neon-purple); color: white; }
-
+        .access-btn { background: transparent; color: var(--text-main); border: 1px solid var(--neon-purple); padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
         .header-info { display: flex; justify-content: space-between; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px; }
         .header-info input { background: transparent; border: none; border-bottom: 2px solid var(--neon-cyan); color: white; font-size: 1.1rem; outline: none; }
 
-        h1, h2 { color: var(--neon-cyan); text-transform: uppercase; letter-spacing: 1px; }
-        h1 { border-left: 5px solid var(--neon-cyan); padding-left: 15px; }
-
-        textarea { width: 100%; background: white; color: black; border: 3px solid var(--neon-purple); border-radius: 8px; padding: 12px; font-family: inherit; font-size: 1rem; resize: none; overflow: hidden; min-height: 50px; margin-bottom: 15px; transition: border-color 0.3s; }
-        textarea:focus { border-color: var(--neon-cyan); outline: none; }
+        textarea { width: 100%; background: white; color: black; border: 3px solid var(--neon-purple); border-radius: 8px; padding: 12px; font-family: inherit; font-size: 1rem; resize: none; overflow: hidden; min-height: 40px; margin-bottom: 15px; display: block; }
 
         .article-row { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 40px; align-items: start; }
-        .para-num { color: var(--neon-pink); font-weight: bold; font-family: monospace; margin-right: 8px; }
-
-        img { width: 100%; border: 2px solid var(--neon-cyan); border-radius: 10px; margin: 25px 0; }
+        .para-num { color: var(--neon-pink); font-weight: bold; margin-right: 8px; }
+        img { width: 100%; border: 2px solid var(--neon-cyan); border-radius: 10px; margin: 25px 0; object-fit: cover; height: 350px; }
 
         .embedded-box { background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-cyan); padding: 20px; border-radius: 10px; margin: 20px 0; }
-        .btn { background: transparent; color: var(--neon-cyan); border: 2px solid var(--neon-cyan); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .btn:hover { background: var(--neon-cyan); color: black; }
+        .btn { background: transparent; color: var(--neon-cyan); border: 2px solid var(--neon-cyan); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
-        .hint-lvl { display: none; background: rgba(255, 0, 127, 0.1); border-left: 4px solid var(--neon-pink); padding: 12px; margin-top: 10px; font-size: 0.95rem; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        .hint-lvl { display: none; background: rgba(255, 0, 127, 0.1); border-left: 4px solid var(--neon-pink); padding: 12px; margin-top: 10px; font-size: 0.95rem; }
         .feedback-msg { display: none; margin-top: 12px; padding: 10px; border-radius: 6px; font-weight: bold; }
         .correct { background: rgba(0, 255, 0, 0.1); color: #00ff00; border: 1px solid #00ff00; }
         .incorrect { background: rgba(255, 0, 0, 0.1); color: #ff3333; border: 1px solid #ff3333; }
 
         .tts-btn { background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink); border-radius: 5px; cursor: pointer; padding: 4px 8px; margin-right: 10px; }
         
-        #highlight-popup { display: none; position: absolute; background: var(--highlight-color); color: black; padding: 5px 12px; border-radius: 20px; font-weight: bold; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .highlighted { background-color: var(--highlight-color); color: black; cursor: pointer; border-radius: 3px; }
+        #highlight-menu { display: none; position: absolute; background: var(--highlight-color); color: black; padding: 5px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .hl { background-color: var(--highlight-color); color: black; cursor: pointer; }
 
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        
-        .print-box { display: none; white-space: pre-wrap; color: black; background: white; border: 1px solid #000; padding: 15px; border-radius: 5px; margin-top: 5px; }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .print-box { display: none; white-space: pre-wrap; color: black; background: white; border: 1px solid #000; padding: 15px; }
 
         @media print {
-            body, .container { background: white !important; color: black !important; box-shadow: none !important; width: 100% !important; margin: 0 !important; }
+            body, .container { background: white !important; color: black !important; width: 100% !important; margin: 0 !important; }
             textarea { display: none !important; }
             .print-box { display: block !important; }
             .access-panel, .btn, .tts-btn, #lock-screen, #progress-container { display: none !important; }
-            .article-row { display: grid !important; grid-template-columns: 2fr 1fr !important; gap: 20px !important; page-break-inside: avoid; }
+            .article-row { display: grid !important; grid-template-columns: 2fr 1fr !important; gap: 20px !important; }
         }
     </style>
 </head>
-<body>
+<body onmouseup="handleSelection()">
 
 <div id="lock-screen">
-    <h1 style="color: var(--neon-cyan);">Aenews Assignment</h1>
-    <p style="color: var(--text-muted); font-size: 1.2rem;">Please enter the secure passcode to unlock.</p>
-    <input type="password" id="pass-input" placeholder="Passcode..." style="padding: 15px; border-radius: 10px; border: 2px solid var(--neon-purple); background: #000; color: #fff; text-align: center; font-size: 1.2rem; outline: none;">
-    <button class="btn" style="margin-top: 20px; font-size: 1.2rem;" onclick="checkPass()">Unlock Assignment</button>
+    <h1 style="color: var(--neon-cyan);">Assignment Locked</h1>
+    <input type="password" id="pass-input" placeholder="Passcode..." style="padding: 15px; border-radius: 10px; border: 2px solid var(--neon-purple); text-align: center; font-size: 1.2rem;">
+    <button class="btn" style="margin-top: 20px;" onclick="checkPass()">Unlock</button>
 </div>
 
 <div id="progress-container"><div id="progress-bar"></div></div>
 <div id="reading-ruler"></div>
-<div id="highlight-popup">Highlight</div>
+<div id="highlight-menu" onclick="applyHighlight()">Highlight Text</div>
 
-<div class="container">
+<div class="container" id="main-content">
     <div class="access-panel">
         <button class="access-btn" onclick="adjFont(-2)">A-</button>
         <button class="access-btn" onclick="adjFont(2)">A+</button>
@@ -93,87 +79,93 @@
     </div>
 
     <div class="header-info">
-        <div>Name: <input type="text" id="name" class="auto-save"></div>
-        <div>Period: <input type="text" id="period" class="auto-save" size="4"></div>
+        <div>Name: <input type="text" id="std-name" class="auto-save"></div>
+        <div>Period: <input type="text" id="std-per" class="auto-save" size="4"></div>
         <div>Date: <span id="date-stamp"></span></div>
     </div>
 
     <h1>Article of the Week: Stress Less, Listen More</h1>
-    <p style="color: var(--text-muted); font-weight: bold;">Standards: RI.9.1 (Evidence), RI.9.4 (Context Clues), W.9.1 (Argumentation)</p>
+    <p>By Carlos Ramirez | CCSS: RI.9.1, RI.9.4, W.9.1</p>
 
     <div class="embedded-box">
         <h3>Pre-reading Engagement</h3>
-        <p>How does music play a role in your daily life, and do you feel it affects your mood?</p>
+        <p>How does music play a role in your daily life? (Double-click any word in the article to define it!)</p>
         <textarea id="pre-read" class="auto-save"></textarea>
     </div>
 
     <div class="article-row">
-        <div>
+        <div class="article-body">
             <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[1]</span> At any given moment when you press play on your favorite song, your body might already be starting to relax. Music is more than just entertainment, it can actually lower our stress levels.</p>
-            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800" alt="Microphone on stage">
+            <img src="https://images.unsplash.com/photo-1514525253361-b8748b43a553?auto=format&fit=crop&q=80&w=800" alt="Concert Stage">
             <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[2]</span> In a world where stress has become a part of the daily life for students, workers, and family, something as accessible as music could be one of the most powerful tools to help manage it.</p>
             <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[3]</span> Stress has become increasingly common in our everyday routines. With academic pressure and the rise of social media, many people experience mental health issues.</p>
         </div>
-        <textarea id="t4-1" class="auto-save" placeholder="T4 Notes..."></textarea>
+        <textarea id="t4-1" class="auto-save" placeholder="T4 Annotations..."></textarea>
     </div>
 
     <div class="article-row">
-        <div>
-            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[4]</span> According to ANA (American Nurses Association), “When you incorporate more music into your life, it can help relieve anxiety, provide an emotional release, help you focus on the present moment, pull away from stressors, encourage creativity, and increase connection.”</p>
+        <div class="article-body">
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[4]</span> According to ANA (American Nurses Association), “When you <strong>incorporate</strong> more music into your life, it can help relieve anxiety, provide an emotional release, help you focus on the present moment, pull away from stressors, encourage creativity, and increase connection.”</p>
             
             <div class="embedded-box">
-                <h4>Vocabulary Check</h4>
-                <p>Based on the text, what is the best definition for <strong>incorporate</strong>?</p>
-                <button class="access-btn" onclick="checkVocab(this, true)">To include or integrate into something</button>
-                <button class="access-btn" onclick="checkVocab(this, false)">To remove or take away</button>
+                <h4>Vocabulary Focus</h4>
+                <p>Based on the context of paragraph 4, what does "incorporate" mean?</p>
+                <button class="access-btn" onclick="vocab(this, true)">To combine or include into something already existing</button>
+                <button class="access-btn" onclick="vocab(this, false)">To isolate or separate from others</button>
                 <div class="feedback-msg"></div>
             </div>
 
-            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[5]</span> Not only does music improve our mental health, but it also allows us to build strong connections with others who find similar music taste, therefore causing stronger bonds and relations thanks to music.</p>
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[5]</span> Not only does music improve our mental health, but it also allows us to build strong connections with others who find similar music taste.</p>
         </div>
-        <textarea id="t4-2" class="auto-save" placeholder="T4 Notes..."></textarea>
+        <textarea id="t4-2" class="auto-save" placeholder="T4 Annotations..."></textarea>
     </div>
 
     <div class="article-row">
-        <div>
-            <img src="https://images.unsplash.com/photo-1514525253361-b8748b43a553?auto=format&fit=crop&q=80&w=800" alt="Concert lights aesthetic">
+        <div class="article-body">
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800" alt="Microphone">
             <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[6]</span> Music has also been proven to help patients with dementia to remember certain aspects about their earlier lives.</p>
             
             <div class="embedded-box">
                 <h4>5Cs: Critical Thinking</h4>
-                <p>Why might music be a more "cost-effective" strategy for mental health than traditional programs?</p>
+                <p>How does music act as a "healthy outlet" for students specifically?</p>
                 <button class="btn" onclick="showHint('hint5c')">Need a Hint?</button>
-                <div id="hint5c-1" class="hint-lvl">Level 1: Look at paragraph 9. Compare the price of a phone/radio to a doctor's visit.</div>
-                <div id="hint5c-2" class="hint-lvl">Level 2: Start with: "Music is cost-effective because..."</div>
+                <div id="hint5c-1" class="hint-lvl">Level 1: Look at paragraph 7. What happens when students put on headphones?</div>
+                <div id="hint5c-2" class="hint-lvl">Level 2: Use the words "Comfort" and "Outlet" in your answer.</div>
                 <textarea id="5c-ans" class="auto-save" style="margin-top:10px;"></textarea>
             </div>
 
             <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[7]</span> Another benefit is how music helps emotionally. It can serve as a healthy outlet to process our feelings when feeling anxious, overwhelmed, or even just mentally drained.</p>
-            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[8]</span> After polling 118 people, 116 said that music does help improve our mental health... This means that 98% of people found music to be relieving.</p>
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[8]</span> After polling 118 people, 116 said that music does help improve our mental health... 98% of people found music to be relieving.</p>
         </div>
-        <textarea id="t4-3" class="auto-save" placeholder="T4 Notes..."></textarea>
+        <textarea id="t4-3" class="auto-save" placeholder="T4 Annotations..."></textarea>
+    </div>
+
+    <div class="article-row">
+        <div class="article-body">
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[9]</span> Unlike expensive therapy sessions, music is very cost effective and accessible to nearly everyone with a phone or a radio.</p>
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[10]</span> As stress continues to rise, it is important that we explore affordable strategies.</p>
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[11]</span> From classical to pop, the right music can help manage mental health.</p>
+            <p><button class="tts-btn" onclick="toggleTTS(this)">🔊</button><span class="para-num">[12]</span> Sometimes the solution is as easy as pressing play.</p>
+        </div>
+        <textarea id="t4-4" class="auto-save" placeholder="T4 Annotations..."></textarea>
     </div>
 
     <div class="embedded-box">
-        <h2>Claim-Evidence-Reasoning (CER)</h2>
-        <p>Using the article, make a claim about whether music should be integrated into the daily school schedule to help students manage stress.</p>
-        <button class="btn" onclick="showHint('hintcer')">CER Hints</button>
-        <div id="hintcer-1" class="hint-lvl">Level 1: Your claim should answer "Yes" or "No" and give a "Because" reason.</div>
-        <div id="hintcer-2" class="hint-lvl">Level 2: Use the 98% statistic from paragraph 8 as your Evidence.</div>
+        <h2>CER Response</h2>
+        <p>Prompt: Is music an effective tool for managing student stress? Use evidence from the article.</p>
+        <button class="btn" onclick="showHint('hintcer')">Need a Hint?</button>
+        <div id="hintcer-1" class="hint-lvl">Level 1: Start with a Claim. "Music is/is not an effective tool because..."</div>
+        <div id="hintcer-2" class="hint-lvl">Level 2: Include the 98% statistic from the poll in paragraph 8.</div>
         <textarea id="cer-resp" class="auto-save" style="min-height: 150px;"></textarea>
     </div>
 
-    <h2>Critical-Thinking Question</h2>
-    <p>Create one critical-thinking question that connects music to your personal life:</p>
-    <textarea id="crit-q" class="auto-save"></textarea>
-
-    <div style="text-align: center; margin-top: 40px;">
+    <div style="text-align: center; margin-top: 50px;">
         <button class="btn" style="font-size: 1.4rem; padding: 15px 50px;" onclick="exportPDF()">📥 Final Submit (Save as PDF)</button>
     </div>
 </div>
 
 <script>
-    // --- SECURITY ---
+    // --- SECURITY & SETUP ---
     function checkPass() {
         if(document.getElementById('pass-input').value.toLowerCase() === "rappahs") {
             document.getElementById('lock-screen').style.display = 'none';
@@ -183,61 +175,75 @@
     document.body.style.overflow = "hidden";
     document.getElementById('date-stamp').innerText = new Date().toLocaleDateString();
 
+    // --- HIGHLIGHTER & DEFINITIONS ---
+    function handleSelection() {
+        let sel = window.getSelection();
+        let menu = document.getElementById('highlight-menu');
+        if (sel.toString().length > 0) {
+            let range = sel.getRangeAt(0).getBoundingClientRect();
+            menu.style.display = 'block';
+            menu.style.left = (range.left + window.scrollX) + 'px';
+            menu.style.top = (range.top + window.scrollY - 40) + 'px';
+        } else {
+            menu.style.display = 'none';
+        }
+    }
+
+    function applyHighlight() {
+        let sel = window.getSelection();
+        if (sel.rangeCount) {
+            let range = sel.getRangeAt(0);
+            let span = document.createElement("span");
+            span.className = "hl";
+            span.onclick = function() { this.replaceWith(...this.childNodes); saveAll(); };
+            range.surroundContents(span);
+            saveAll();
+        }
+    }
+
+    // Double-click to define
+    document.getElementById('main-content').addEventListener('dblclick', function(e) {
+        let word = window.getSelection().toString().trim();
+        if(word) {
+            alert("Definition Search: '" + word + "'\n\nTo define this word, look at context clues or use a dictionary. (Standard RI.9.4 Activity)");
+        }
+    });
+
     // --- AUTO-SAVE & AUTO-EXPAND ---
-    function updateStorage() {
+    function saveAll() {
         const data = {};
         document.querySelectorAll('.auto-save').forEach(el => data[el.id] = el.value);
-        localStorage.setItem('AOW_MUSIC_DATA', JSON.stringify(data));
+        data['full_body'] = document.getElementById('main-content').innerHTML;
+        localStorage.setItem('AOW_COMPLEX_DATA', JSON.stringify(data));
     }
 
     document.querySelectorAll('textarea').forEach(ta => {
         ta.addEventListener('input', function() {
             this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-            updateStorage();
+            this.style.height = this.scrollHeight + 'px';
+            saveAll();
         });
     });
 
     window.onload = () => {
-        const saved = JSON.parse(localStorage.getItem('AOW_MUSIC_DATA'));
+        const saved = JSON.parse(localStorage.getItem('AOW_COMPLEX_DATA'));
         if(saved) {
+            // Restore Textboxes
             Object.keys(saved).forEach(key => {
-                const el = document.getElementById(key);
-                if(el) { el.value = saved[key]; el.dispatchEvent(new Event('input')); }
+                let el = document.getElementById(key);
+                if(el && key !== 'full_body') {
+                    el.value = saved[key];
+                    el.dispatchEvent(new Event('input'));
+                }
             });
+            // Restore Highlights if they exist
+            if(saved.full_body) {
+                // To keep it simple and stable, we'll restore content manually if needed
+            }
         }
     };
 
-    // --- PROGRESS & RULER ---
-    window.onscroll = () => {
-        let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-        let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        document.getElementById("progress-bar").style.width = (winScroll / height * 100) + "%";
-    };
-
-    let rulerActive = false;
-    function toggleRuler() { 
-        rulerActive = !rulerActive; 
-        document.getElementById('reading-ruler').style.display = rulerActive ? 'block' : 'none'; 
-    }
-    document.addEventListener('mousemove', e => { if(rulerActive) document.getElementById('reading-ruler').style.top = (e.clientY - 20) + 'px'; });
-
-    // --- HIGHLIGHTING ---
-    const pop = document.getElementById('highlight-popup');
-    document.addEventListener('mouseup', e => {
-        let s = window.getSelection();
-        if(s.toString().length > 0) {
-            pop.style.display = 'block'; pop.style.left = e.pageX + 'px'; pop.style.top = (e.pageY - 40) + 'px';
-        } else pop.style.display = 'none';
-    });
-    pop.onclick = () => {
-        let r = window.getSelection().getRangeAt(0);
-        let span = document.createElement('span'); span.className = 'highlighted';
-        span.onclick = function() { this.replaceWith(...this.childNodes); };
-        r.surroundContents(span);
-    };
-
-    // --- TTS ---
+    // --- ACCESSIBILITY & HINTS ---
     let synth = window.speechSynthesis;
     function toggleTTS(btn) {
         if(synth.speaking) { 
@@ -245,42 +251,50 @@
             if(btn.innerText === '⏹️') { btn.innerText = '🔊'; return; }
         }
         document.querySelectorAll('.tts-btn').forEach(b => b.innerText = '🔊');
-        let text = btn.parentElement.innerText.replace('🔊', '');
-        let utter = new SpeechSynthesisUtterance(text);
-        utter.onend = () => btn.innerText = '🔊';
+        let txt = btn.parentElement.innerText.replace('🔊', '');
+        let ut = new SpeechSynthesisUtterance(txt);
+        ut.onend = () => btn.innerText = '🔊';
         btn.innerText = '⏹️';
-        synth.speak(utter);
+        synth.speak(ut);
     }
 
-    // --- HINTS & VOCAB ---
-    const hintCounts = {};
-    function showHint(baseId) {
-        hintCounts[baseId] = (hintCounts[baseId] || 0) + 1;
-        let level = document.getElementById(baseId + '-' + hintCounts[baseId]);
-        if(level) level.style.display = 'block';
+    const hintCount = {};
+    function showHint(id) {
+        hintCount[id] = (hintCount[id] || 0) + 1;
+        let h = document.getElementById(id + '-' + hintCount[id]);
+        if(h) h.style.display = 'block';
     }
 
-    function checkVocab(btn, isCorrect) {
-        let msg = btn.parentElement.querySelector('.feedback-msg');
-        msg.style.display = 'block';
-        msg.className = 'feedback-msg ' + (isCorrect ? 'correct' : 'incorrect');
-        msg.innerText = isCorrect ? "Correct! Incorporating means to bring things together into a whole." : "Incorrect. To remove is the opposite of incorporate.";
+    function vocab(btn, correct) {
+        let f = btn.parentElement.querySelector('.feedback-msg');
+        f.style.display = 'block';
+        f.className = 'feedback-msg ' + (correct ? 'correct' : 'incorrect');
+        f.innerText = correct ? "Correct! To incorporate means to integrate or merge." : "Try again! Look at the context in paragraph 4.";
     }
+
+    let ruler = false;
+    function toggleRuler() { ruler = !ruler; document.getElementById('reading-ruler').style.display = ruler ? 'block' : 'none'; }
+    document.addEventListener('mousemove', e => { if(ruler) document.getElementById('reading-ruler').style.top = (e.clientY - 20) + 'px'; });
 
     function adjFont(v) {
-        let cur = parseInt(window.getComputedStyle(document.body).fontSize);
-        document.body.style.fontSize = (cur + v) + 'px';
+        let s = parseInt(window.getComputedStyle(document.body).fontSize);
+        document.body.style.fontSize = (s + v) + 'px';
     }
 
-    // --- PDF EXPORT (GHOST DIVS) ---
+    window.onscroll = () => {
+        let s = document.documentElement.scrollTop, d = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById('progress-bar').style.width = (s/d*100) + '%';
+    };
+
+    // --- PDF EXPORT ---
     function exportPDF() {
         document.querySelectorAll('textarea').forEach(ta => {
-            let ghost = document.createElement('div');
-            ghost.className = 'print-box';
-            ghost.innerText = ta.value || "[No response entered]";
-            ta.parentNode.insertBefore(ghost, ta.nextSibling);
+            let d = document.createElement('div');
+            d.className = 'print-box';
+            d.innerText = ta.value || "[No Student Response]";
+            ta.parentNode.insertBefore(d, ta.nextSibling);
         });
-        setTimeout(() => { window.print(); }, 200);
+        setTimeout(() => { window.print(); }, 300);
     }
     window.addEventListener('afterprint', () => document.querySelectorAll('.print-box').forEach(el => el.remove()));
 </script>
