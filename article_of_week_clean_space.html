@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Article of the Week: A clean space, better learning</title>
+  <style>
+    :root {
+      --bg: #f5efe2;
+      --panel: #fff8ec;
+      --panel-2: #f2e5cf;
+      --text: #2f3f3a;
+      --muted: #5d6f68;
+      --neon-cyan: #2a9d8f;
+      --neon-pink: #e29578;
+      --accent: #6b8e23;
+      --ink: #0f1117;
+      --article-size: 1rem;
+      --ruler-y: -100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, #d9c9a3 0%, transparent 32%),
+        radial-gradient(circle at 90% 20%, #b9d9d0 0%, transparent 28%),
+        linear-gradient(160deg, var(--bg), #e9dcc4 56%, #d7ebe5 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body.locked { overflow: hidden; }
+
+    body.high-contrast {
+      --bg: #000;
+      --panel: #111;
+      --panel-2: #000;
+      --text: #fff;
+      --muted: #fff;
+      --neon-cyan: #fff;
+      --neon-pink: #fff;
+      --accent: #fff;
+      background: #000;
+    }
+
+    .progress-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(4px);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+      transition: width 0.12s linear;
+    }
+
+    .lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: #ded1ba;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .lock-card {
+      width: min(460px, 100%);
+      background: var(--panel);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 0 24px rgba(42, 157, 143, 0.22);
+    }
+
+    .lock-card h2 { margin: 0 0 0.6rem; }
+    .lock-card p { margin: 0.2rem 0 0.8rem; color: var(--muted); }
+
+    .lock-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem;
+    }
+
+    .page {
+      width: min(1180px, 96vw);
+      margin: 10px auto 20px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid rgba(42, 157, 143, 0.35);
+      border-radius: 10px;
+      padding: 0.7rem;
+    }
+
+    h1, h2, h3, h4 { margin: 0.2rem 0; }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .date-stamp {
+      font-weight: 700;
+      color: var(--accent);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(135, 255, 101, 0.6);
+      background: rgba(135, 255, 101, 0.08);
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .standards {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    button {
+      border: 1px solid var(--neon-cyan);
+      background: rgba(42, 157, 143, 0.08);
+      color: var(--text);
+      border-radius: 7px;
+      padding: 6px 9px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover { filter: brightness(1.08); }
+
+    .active-toggle {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(135, 255, 101, 0.2) inset;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      border: 2px solid var(--neon-pink);
+      border-radius: 8px;
+      background: #fff;
+      color: #111;
+      padding: 8px;
+      font: inherit;
+      outline: none;
+    }
+
+    textarea {
+      resize: none;
+      overflow: hidden;
+      min-height: 2.2rem;
+      line-height: 1.35;
+    }
+
+    .compact { font-size: 0.88rem; color: var(--muted); }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .support-card {
+      border: 1px solid rgba(42, 157, 143, 0.35);
+      border-radius: 8px;
+      background: rgba(255, 244, 225, 0.75);
+      padding: 8px;
+    }
+
+    .article-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .article-col {
+      display: grid;
+      gap: 8px;
+    }
+
+    .article-row {
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 8px;
+      align-items: start;
+      background: rgba(245, 235, 214, 0.72);
+      border: 1px solid rgba(93, 111, 104, 0.2);
+      border-radius: 9px;
+      padding: 0.55rem;
+    }
+
+    .article-text {
+      font-size: var(--article-size);
+      line-height: 1.45;
+    }
+
+    .article-text.dyslexia {
+      font-family: "Comic Sans MS", Arial, sans-serif;
+    }
+
+    .pnum {
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .tts-btn {
+      margin-left: 6px;
+      padding: 2px 6px;
+      font-size: 0.88rem;
+      line-height: 1;
+      border-radius: 6px;
+      vertical-align: middle;
+    }
+
+    .margin-title {
+      font-size: 0.83rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .highlighted {
+      background: rgba(255, 213, 133, 0.5);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .highlight-toolbar,
+    .define-popup {
+      position: absolute;
+      z-index: 1400;
+      display: none;
+      background: #f8f1e5;
+      color: #1c2b28;
+      border: 1px solid var(--neon-cyan);
+      border-radius: 8px;
+      padding: 6px;
+      box-shadow: 0 6px 24px rgba(42, 75, 69, 0.25);
+      max-width: 300px;
+    }
+
+    .define-popup h4 {
+      margin: 0 0 4px;
+      font-size: 0.9rem;
+      color: var(--neon-cyan);
+    }
+
+    .inline-activity {
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid rgba(42, 157, 143, 0.4);
+      border-radius: 8px;
+      background: rgba(186, 214, 204, 0.2);
+    }
+
+    .choice { display: block; margin: 4px 0; cursor: pointer; }
+    .feedback { font-weight: 700; margin-top: 4px; }
+
+    .hint-box {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-left: 3px solid var(--neon-cyan);
+      padding-left: 8px;
+    }
+
+    img.article-image {
+      width: 100%;
+      height: auto;
+      border: 2px solid var(--neon-cyan);
+      border-radius: 8px;
+      margin: 20px 0;
+      display: block;
+    }
+
+    .ruler {
+      position: fixed;
+      left: 0;
+      right: 0;
+      height: 2.2rem;
+      background: rgba(255, 213, 133, 0.2);
+      border-top: 1px solid rgba(226, 149, 120, 0.55);
+      border-bottom: 1px solid rgba(226, 149, 120, 0.55);
+      top: var(--ruler-y);
+      pointer-events: none;
+      display: none;
+      z-index: 1200;
+    }
+
+    .footer-actions { display: flex; justify-content: flex-end; }
+    .print-box { display: none; }
+
+    @media (max-width: 980px) {
+      .top-grid, .support-grid, .article-row { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      .no-print, .highlight-toolbar, .define-popup, .ruler, .progress-wrap { display: none !important; }
+      .panel, .article-row {
+        border: 1px solid #333 !important;
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+      }
+      .article-row {
+        display: grid !important;
+        grid-template-columns: 2.2fr 1fr !important;
+        gap: 8px !important;
+      }
+      textarea { display: none !important; }
+      .print-box {
+        display: block !important;
+        border: 1px solid #000;
+        padding: 6px;
+        min-height: 1.2rem;
+        white-space: pre-wrap;
+        background: #fff;
+        color: #000;
+      }
+      .highlighted { background: #ddd !important; }
+    }
+  </style>
+</head>
+<body class="locked">
+  <div class="progress-wrap no-print"><div id="progressBar" class="progress-bar"></div></div>
+
+  <div id="lockOverlay" class="lock-overlay no-print" aria-modal="true" role="dialog">
+    <div class="lock-card">
+      <h2>Assignment Locked</h2>
+      <p>Enter class passcode to begin.</p>
+      <div class="lock-row">
+        <input id="passcodeInput" type="text" aria-label="Passcode" placeholder="Enter passcode" />
+        <button id="unlockBtn" type="button">Unlock</button>
+      </div>
+      <p id="passcodeMsg" class="compact" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="highlight-toolbar no-print" id="highlightToolbar">
+    <button type="button" id="doHighlight">Highlight</button>
+    <button type="button" id="doDefine">Define</button>
+  </div>
+  <div class="define-popup no-print" id="definePopup" aria-live="polite"></div>
+  <div id="readingRuler" class="ruler no-print"></div>
+
+  <main class="page">
+    <section class="panel">
+      <div class="top-grid">
+        <div class="field">
+          <label for="studentName">Name</label>
+          <input id="studentName" type="text" placeholder="Your name" />
+        </div>
+        <div class="field">
+          <label for="period">Period</label>
+          <input id="period" type="text" placeholder="Class period" />
+        </div>
+        <div>
+          <label>Automatic Date Stamp</label>
+          <div id="dateStamp" class="date-stamp"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h1>Article of the Week: A clean space, better learning / Un espacio limpio, un aprendizaje mejor by Evelin Ortuño</h1>
+      <div class="standards">
+        <strong>CCSS 9th Grade ELA Standards:</strong>
+        RI.9-10.1 (cite textual evidence), RI.9-10.2 (determine central idea), RI.9-10.3 (analyze development of ideas), W.9-10.1 (write arguments), W.9-10.4 (clear writing), W.9-10.9 (draw evidence from texts), L.9-10.4 (determine meanings), SL.9-10.1 (collaborative discussion)
+      </div>
+    </section>
+
+    <section class="panel no-print">
+      <h3>Accessibility Control Panel</h3>
+      <div class="controls">
+        <button type="button" id="fontDown">A-</button>
+        <button type="button" id="fontUp">A+</button>
+        <button type="button" id="dyslexiaToggle">Dyslexia Font</button>
+        <button type="button" id="contrastToggle">High Contrast</button>
+        <button type="button" id="rulerToggle">Reading Ruler</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>Learning Supports</h3>
+      <div class="support-grid">
+        <div class="support-card">
+          <strong>Sentence Frames</strong>
+          <p class="compact">Use these starters in annotations or responses: "One problem I notice is..." "A solution that could work is..." "This matters because..." "A nuance is..."</p>
+        </div>
+        <div class="support-card">
+          <strong>Word Bank</strong>
+          <p class="compact"><strong>Nuance</strong>: a subtle detail or important difference.</p>
+          <p class="compact"><strong>Deteriorate</strong>: to become worse over time.</p>
+          <p class="compact"><strong>Custodian</strong>: staff member who helps maintain clean facilities.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>Pre-reading Engagement</h3>
+      <p class="compact">Poll: Which area on campus needs the most care right now?</p>
+      <label class="choice"><input type="radio" name="cleanPoll" id="pollBathrooms" value="Bathrooms" /> Bathrooms</label>
+      <label class="choice"><input type="radio" name="cleanPoll" id="pollCafeteria" value="Cafeteria" /> Cafeteria</label>
+      <label class="choice"><input type="radio" name="cleanPoll" id="pollClassrooms" value="Classrooms" /> Classrooms</label>
+      <label class="choice"><input type="radio" name="cleanPoll" id="pollOutdoor" value="Outdoor Areas" /> Outdoor Areas</label>
+      <textarea id="preJournal" rows="1" placeholder="Journal: Describe one place in your learning environment where cleanliness affects your focus."></textarea>
+    </section>
+
+    <section class="panel">
+      <h3>T4: Talk To The Text Annotations</h3>
+      <p class="compact">Select text to highlight/define. Click highlighted text to remove highlight.</p>
+
+      <div class="article-layout">
+        <div class="article-col" id="articleContent">
+          <div class="article-row">
+            <div class="article-text">
+              <p id="p1"><span class="pnum">1.</span>“A clean space, better learning” / “Un espacio limpio, un aprendizaje mejor.” Evelin Ortuño, Aenews.org, September 19, 2025. <button class="tts-btn no-print" data-target="p1" type="button">🔊</button></p>
+              <p id="p2"><span class="pnum">2.</span>This article asks students and staff to pay closer attention to campus cleanliness. The author describes common problems such as trash and unpleasant bathroom smells. <button class="tts-btn no-print" data-target="p2" type="button">🔊</button></p>
+            </div>
+            <div>
+              <div class="margin-title">Annotations (P1-P2)</div>
+              <textarea id="note1" rows="1" placeholder="Connection: Which campus area in this paragraph matches your experience?"></textarea>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <div class="article-text">
+              <p id="p3"><span class="pnum">3.</span>The author says we sometimes litter or disrespect school spaces even though there are only a few staff members available to clean. Time and space are limited because classes happen every day. <button class="tts-btn no-print" data-target="p3" type="button">🔊</button></p>
+              <p id="p4"><span class="pnum">4.</span>Because of that, the author proposes a community mindset: students should care for school “as a family” and work together to protect the environment. <button class="tts-btn no-print" data-target="p4" type="button">🔊</button></p>
+
+              <img class="article-image" src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=900" alt="Students on a school campus walkway during daytime" />
+            </div>
+            <div>
+              <div class="margin-title">Annotations (P3-P4)</div>
+              <textarea id="note2" rows="1" placeholder="In your own words, why can custodians not fix everything alone?"></textarea>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <div class="article-text">
+              <p id="p5"><span class="pnum">5.</span>The article suggests specific actions: stop littering, separate recycling, organize monthly clean-up days, avoid vandalism, clean your space before leaving, and pick up trash you see. <button class="tts-btn no-print" data-target="p5" type="button">🔊</button></p>
+
+              <div class="inline-activity">
+                <h4>Skill Focus: Character</h4>
+                <p class="compact">Which action from paragraph 5 best shows good character in a school community, and why?</p>
+                <textarea id="skillResponse" rows="1" placeholder="Sentence frame: This action shows character because..."></textarea>
+                <button class="no-print" type="button" id="hintBtn">Need a Hint?</button>
+                <div id="hintBox" class="hint-box" hidden></div>
+              </div>
+            </div>
+            <div>
+              <div class="margin-title">Annotations (P5)</div>
+              <textarea id="note3" rows="1" placeholder="Choose one action and explain how it helps learning."></textarea>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <div class="article-text">
+              <p id="p6"><span class="pnum">6.</span>The author reminds readers that school is where we spend much of our time learning, sharing, and growing. Cleanliness is a shared responsibility of students, teachers, and administrative staff, not only custodians. <button class="tts-btn no-print" data-target="p6" type="button">🔊</button></p>
+              <p id="p7"><span class="pnum">7.</span>Advantages include better concentration, fewer distractions, better health, and a stronger image of responsible students. <button class="tts-btn no-print" data-target="p7" type="button">🔊</button></p>
+
+            </div>
+            <div>
+              <div class="margin-title">Annotations (P6-P7)</div>
+              <textarea id="note4" rows="1" placeholder="Which advantage matters most to you: focus, health, or school pride? Why?"></textarea>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <div class="article-text">
+              <p id="p8"><span class="pnum">8.</span>Disadvantages of not cleaning include bad odors, clutter, loss of concentration, infection risks, and accidents from scattered objects in halls or classrooms. Facilities may also <strong>deteriorate</strong> more quickly, increasing costs. <button class="tts-btn no-print" data-target="p8" type="button">🔊</button></p>
+
+              <div class="inline-activity" id="vocabActivity">
+                <h4>Vocabulary in Context</h4>
+                <p>In paragraph 8, what does <strong>deteriorate</strong> most likely mean?</p>
+                <label class="choice"><input type="radio" id="vocabA" name="vocabQ" value="a" /> A. To become cleaner over time</label>
+                <label class="choice"><input type="radio" id="vocabB" name="vocabQ" value="b" /> B. To become worse or damaged over time</label>
+                <label class="choice"><input type="radio" id="vocabC" name="vocabQ" value="c" /> C. To be shared equally by everyone</label>
+                <label class="choice"><input type="radio" id="vocabD" name="vocabQ" value="d" /> D. To move quickly between classes</label>
+                <div id="vocabFeedback" class="feedback" aria-live="polite"></div>
+              </div>
+            </div>
+            <div>
+              <div class="margin-title">Annotations (P8)</div>
+              <textarea id="note5" rows="1" placeholder="Nuance check: How can one small mess lead to bigger problems later?"></textarea>
+            </div>
+          </div>
+
+          <div class="article-row">
+            <div class="article-text">
+              <p id="p9"><span class="pnum">9.</span>The article ends with a call to action: if everyone contributes a little effort, school can become healthier, more welcoming, and a place the community is proud of. <button class="tts-btn no-print" data-target="p9" type="button">🔊</button></p>
+
+              <img class="article-image" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=900" alt="School classroom interior with desks arranged neatly" />
+
+              <div class="inline-activity">
+                <h4>Claim-Evidence-Reasoning (CER) Written Response</h4>
+                <p class="compact">Prompt: Should schools run a monthly student clean-up day? Write a CER response using evidence from this article.</p>
+                <textarea id="cerResponse" rows="1" placeholder="Claim... Evidence... Reasoning..."></textarea>
+                <button class="no-print" type="button" id="cerHintBtn">CER Hints</button>
+                <div id="cerHintBox" class="hint-box" hidden></div>
+              </div>
+
+              <div class="inline-activity">
+                <h4>Critical-Thinking Connection</h4>
+                <p class="compact">Write one critical-thinking question that connects this article to your real world in your school, home, or community.</p>
+                <textarea id="criticalQuestion" rows="1" placeholder="Write your own critical-thinking question..."></textarea>
+              </div>
+            </div>
+            <div>
+              <div class="margin-title">Final Annotations</div>
+              <textarea id="note6" rows="1" placeholder="Personal connection: One change I can make this week is..."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel no-print footer-actions">
+      <button type="button" id="finalSubmit">Final Submit (Save as PDF)</button>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const STORAGE_KEY = "aow_clean_space_assignment_v1";
+      const articleContent = document.getElementById("articleContent");
+      const progressBar = document.getElementById("progressBar");
+      const toolbar = document.getElementById("highlightToolbar");
+      const definePopup = document.getElementById("definePopup");
+      const readingRuler = document.getElementById("readingRuler");
+      const body = document.body;
+
+      let selectedRange = null;
+      let hintLevel = 0;
+      let cerHintLevel = 0;
+      let currentTtsButton = null;
+      let rulerEnabled = false;
+
+      document.getElementById("dateStamp").textContent = new Date().toLocaleDateString(undefined, {
+        weekday: "long", year: "numeric", month: "long", day: "numeric"
+      });
+
+      function autoExpand(el) {
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
+      }
+
+      function autoExpandAll() {
+        document.querySelectorAll("textarea").forEach(autoExpand);
+      }
+
+      function getState() {
+        const fields = {};
+        document.querySelectorAll("input[id], textarea[id]").forEach((el) => {
+          if (el.type === "radio") fields[el.id] = el.checked;
+          else fields[el.id] = el.value;
+        });
+        fields.__articleHTML = articleContent.innerHTML;
+        fields.__articleSize = getComputedStyle(document.documentElement).getPropertyValue("--article-size").trim();
+        fields.__dyslexia = document.querySelectorAll(".article-text.dyslexia").length > 0;
+        fields.__contrast = body.classList.contains("high-contrast");
+        fields.__ruler = rulerEnabled;
+        return fields;
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(getState()));
+      }
+
+      function restoreState() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        let data;
+        try { data = JSON.parse(raw); } catch (e) { return; }
+
+        if (data.__articleHTML) articleContent.innerHTML = data.__articleHTML;
+
+        document.querySelectorAll("input[id], textarea[id]").forEach((el) => {
+          if (!(el.id in data)) return;
+          if (el.type === "radio") el.checked = Boolean(data[el.id]);
+          else el.value = data[el.id];
+        });
+
+        if (data.__articleSize) document.documentElement.style.setProperty("--article-size", data.__articleSize);
+        if (data.__dyslexia) {
+          document.querySelectorAll(".article-text").forEach((x) => x.classList.add("dyslexia"));
+          document.getElementById("dyslexiaToggle").classList.add("active-toggle");
+        }
+        if (data.__contrast) {
+          body.classList.add("high-contrast");
+          document.getElementById("contrastToggle").classList.add("active-toggle");
+        }
+        if (data.__ruler) {
+          rulerEnabled = true;
+          readingRuler.style.display = "block";
+          document.getElementById("rulerToggle").classList.add("active-toggle");
+        }
+      }
+
+      function updateProgress() {
+        const doc = document.documentElement;
+        const pct = (doc.scrollHeight - doc.clientHeight) > 0
+          ? ((doc.scrollTop || document.body.scrollTop) / (doc.scrollHeight - doc.clientHeight)) * 100
+          : 0;
+        progressBar.style.width = pct.toFixed(2) + "%";
+      }
+
+      function unwrapHighlight(span) {
+        const p = span.parentNode;
+        while (span.firstChild) p.insertBefore(span.firstChild, span);
+        p.removeChild(span);
+        p.normalize();
+      }
+
+      function safeSurround(range, className) {
+        const wrap = document.createElement("span");
+        wrap.className = className;
+        try { range.surroundContents(wrap); }
+        catch (e) {
+          const c = range.extractContents();
+          wrap.appendChild(c);
+          range.insertNode(wrap);
+        }
+      }
+
+      function showToolbar(range) {
+        const r = range.getBoundingClientRect();
+        toolbar.style.left = `${Math.max(8, r.left + window.scrollX)}px`;
+        toolbar.style.top = `${Math.max(8, r.top + window.scrollY - 44)}px`;
+        toolbar.style.display = "block";
+      }
+
+      function hideTools() {
+        toolbar.style.display = "none";
+        definePopup.style.display = "none";
+      }
+
+      async function defineWord(word, x, y) {
+        definePopup.style.display = "block";
+        definePopup.style.left = `${x}px`;
+        definePopup.style.top = `${y}px`;
+        definePopup.innerHTML = `<h4>Definition: ${word}</h4><div class="compact">Loading...</div>`;
+        try {
+          const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          const meaning = data[0]?.meanings?.[0]?.definitions?.[0]?.definition || "Definition unavailable.";
+          definePopup.innerHTML = `<h4>Definition: ${word}</h4><div>${meaning}</div>`;
+        } catch (e) {
+          definePopup.innerHTML = `<h4>Definition: ${word}</h4><div>No definition found. Try another word.</div>`;
+        }
+      }
+
+      function stopTTS() {
+        speechSynthesis.cancel();
+        if (currentTtsButton) {
+          currentTtsButton.textContent = "🔊";
+          currentTtsButton.classList.remove("active-toggle");
+        }
+        currentTtsButton = null;
+      }
+
+      function playTTS(btn, text) {
+        if (!text) return;
+        if (currentTtsButton && currentTtsButton !== btn) stopTTS();
+        if (currentTtsButton === btn) { stopTTS(); return; }
+
+        const u = new SpeechSynthesisUtterance(text);
+        currentTtsButton = btn;
+        btn.textContent = "⏹️";
+        btn.classList.add("active-toggle");
+        u.onend = stopTTS;
+        u.onerror = stopTTS;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      }
+
+      function buildPrintGhosts() {
+        document.querySelectorAll(".print-box").forEach((n) => n.remove());
+        document.querySelectorAll("textarea").forEach((ta) => {
+          const ghost = document.createElement("div");
+          ghost.className = "print-box";
+          ghost.textContent = ta.value;
+          ta.insertAdjacentElement("afterend", ghost);
+        });
+      }
+
+      window.addEventListener("afterprint", () => {
+        document.querySelectorAll(".print-box").forEach((n) => n.remove());
+      });
+
+      document.addEventListener("input", (e) => {
+        if (e.target.matches("textarea")) autoExpand(e.target);
+        if (e.target.matches("input, textarea")) saveState();
+      });
+
+      document.addEventListener("change", (e) => {
+        if (e.target.matches("input, textarea")) saveState();
+      });
+
+      document.addEventListener("scroll", updateProgress, { passive: true });
+      window.addEventListener("resize", updateProgress);
+
+      document.addEventListener("mouseup", (e) => {
+        if (!articleContent.contains(e.target)) return;
+        const s = window.getSelection();
+        if (!s || s.rangeCount === 0) return;
+        const r = s.getRangeAt(0);
+        if (r.collapsed) { toolbar.style.display = "none"; return; }
+        selectedRange = r.cloneRange();
+        showToolbar(r);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (e.target.classList.contains("highlighted")) {
+          unwrapHighlight(e.target);
+          saveState();
+          return;
+        }
+        if (!toolbar.contains(e.target) && !definePopup.contains(e.target)) {
+          if (!window.getSelection().toString()) hideTools();
+        }
+      });
+
+      document.getElementById("doHighlight").addEventListener("click", () => {
+        if (!selectedRange || selectedRange.collapsed) return;
+        safeSurround(selectedRange, "highlighted");
+        window.getSelection().removeAllRanges();
+        selectedRange = null;
+        hideTools();
+        saveState();
+      });
+
+      document.getElementById("doDefine").addEventListener("click", () => {
+        if (!selectedRange || selectedRange.collapsed) return;
+        const word = selectedRange.toString().trim().split(/\s+/)[0]?.replace(/[^a-zA-Z\-]/g, "");
+        if (!word) return;
+        const rect = selectedRange.getBoundingClientRect();
+        defineWord(word, Math.max(10, rect.left + window.scrollX), Math.max(10, rect.bottom + window.scrollY + 8));
+      });
+
+      articleContent.addEventListener("dblclick", () => {
+        const s = window.getSelection();
+        const word = s ? s.toString().trim().replace(/[^a-zA-Z\-]/g, "") : "";
+        if (!word || !s || s.rangeCount === 0) return;
+        const rect = s.getRangeAt(0).getBoundingClientRect();
+        defineWord(word, Math.max(10, rect.left + window.scrollX), Math.max(10, rect.bottom + window.scrollY + 8));
+      });
+
+      articleContent.addEventListener("click", (e) => {
+        const btn = e.target.closest(".tts-btn");
+        if (!btn) return;
+        const target = document.getElementById(btn.getAttribute("data-target"));
+        playTTS(btn, target ? target.textContent.replace("🔊", "") : "");
+      });
+
+      document.addEventListener("change", (e) => {
+        if (e.target.name === "vocabQ") {
+          const fb = document.getElementById("vocabFeedback");
+          if (e.target.value === "b") {
+            fb.textContent = "Correct: Deteriorate means to get worse over time. The article says neglected spaces worsen and cost more to fix.";
+            fb.style.color = "#87ff65";
+          } else {
+            fb.textContent = "Not yet: In this context, deteriorate means school facilities become worse or more damaged over time.";
+            fb.style.color = "#ff9e9e";
+          }
+          saveState();
+        }
+      });
+
+      document.getElementById("hintBtn").addEventListener("click", () => {
+        hintLevel = Math.min(hintLevel + 1, 3);
+        const box = document.getElementById("hintBox");
+        box.hidden = false;
+        if (hintLevel === 1) {
+          box.innerHTML = "<div>Level 1: Pick one action that students can start this week with no extra budget.</div>";
+        } else if (hintLevel === 2) {
+          if (!box.innerHTML.includes("Level 2:")) {
+            box.innerHTML += "<div>Level 2: Sentence starter: The most effective first action is _____ because it improves _____.</div>";
+          }
+        } else {
+          if (!box.innerHTML.includes("Level 2:")) {
+            box.innerHTML += "<div>Level 2: Sentence starter: The most effective first action is _____ because it improves _____.</div>";
+          }
+          if (!box.innerHTML.includes("Level 3:")) {
+            box.innerHTML += "<div>Level 3: Add nuance by naming one challenge (time, motivation, supervision) and one way to solve it.</div>";
+          }
+        }
+        saveState();
+      });
+
+      document.getElementById("cerHintBtn").addEventListener("click", () => {
+        cerHintLevel = Math.min(cerHintLevel + 1, 2);
+        const box = document.getElementById("cerHintBox");
+        box.hidden = false;
+        if (cerHintLevel === 1) {
+          box.innerHTML = "<div>Level 1 Frame: Claim: A monthly clean-up day should/should not happen because... Evidence: The article says... Reasoning: This helps students by...</div>";
+        } else {
+          if (!box.innerHTML.includes("Level 2 Evidence Choices:")) {
+            box.innerHTML += "<div>Level 2 Evidence Choices: (1) The article says clean spaces improve concentration and reduce distractions. (2) It warns that neglect can cause health risks and faster deterioration.</div>";
+          }
+        }
+        saveState();
+      });
+
+      function setArticleSize(delta) {
+        const root = document.documentElement;
+        const cur = parseFloat(getComputedStyle(root).getPropertyValue("--article-size")) || 1;
+        const next = Math.min(1.5, Math.max(0.85, cur + delta));
+        root.style.setProperty("--article-size", `${next}rem`);
+        saveState();
+      }
+
+      document.getElementById("fontDown").addEventListener("click", () => setArticleSize(-0.05));
+      document.getElementById("fontUp").addEventListener("click", () => setArticleSize(0.05));
+
+      document.getElementById("dyslexiaToggle").addEventListener("click", (e) => {
+        document.querySelectorAll(".article-text").forEach((x) => x.classList.toggle("dyslexia"));
+        e.currentTarget.classList.toggle("active-toggle");
+        saveState();
+      });
+
+      document.getElementById("contrastToggle").addEventListener("click", (e) => {
+        body.classList.toggle("high-contrast");
+        e.currentTarget.classList.toggle("active-toggle");
+        saveState();
+      });
+
+      document.getElementById("rulerToggle").addEventListener("click", (e) => {
+        rulerEnabled = !rulerEnabled;
+        readingRuler.style.display = rulerEnabled ? "block" : "none";
+        e.currentTarget.classList.toggle("active-toggle");
+        saveState();
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!rulerEnabled) return;
+        document.documentElement.style.setProperty("--ruler-y", `${e.clientY - 16}px`);
+      });
+
+      document.getElementById("finalSubmit").addEventListener("click", () => {
+        buildPrintGhosts();
+        window.print();
+      });
+
+      const passInput = document.getElementById("passcodeInput");
+      const passMsg = document.getElementById("passcodeMsg");
+      function tryUnlock() {
+        const ok = (passInput.value || "").trim().toLowerCase() === "rappahs";
+        if (!ok) {
+          passMsg.textContent = "Incorrect passcode. Try again.";
+          return;
+        }
+        document.getElementById("lockOverlay").style.display = "none";
+        body.classList.remove("locked");
+        body.style.overflow = "auto";
+      }
+
+      document.getElementById("unlockBtn").addEventListener("click", tryUnlock);
+      passInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") tryUnlock();
+      });
+
+      restoreState();
+      autoExpandAll();
+      updateProgress();
+      setInterval(saveState, 30000);
+    })();
+  </script>
+</body>
+</html>
