@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Article of the Week: Anaheim Through the Lens</title>
+  <style>
+    :root {
+      --bg: #f7fbff;
+      --panel: #ffffff;
+      --panel-2: #eef6ff;
+      --text: #1e2a3a;
+      --muted: #4f5f77;
+      --neon-cyan: #00a6a6;
+      --neon-pink: #ff6b6b;
+      --accent: #ff9f1c;
+      --ink: #0f1117;
+      --article-size: 1.1rem;
+      --ruler-y: -100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 8% 12%, #bde0fe 0%, transparent 34%),
+        radial-gradient(circle at 92% 18%, #ffd6a5 0%, transparent 30%),
+        linear-gradient(160deg, var(--bg), #fef9ef 55%, #e3f5ff 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Accessibility Styles */
+    body.locked { overflow: hidden; }
+    body.high-contrast {
+      --bg: #000; --panel: #111; --panel-2: #000; --text: #fff;
+      --muted: #fff; --neon-cyan: #fff; --neon-pink: #fff; --accent: #fff;
+      background: #000;
+    }
+
+    .progress-wrap { position: sticky; top: 0; z-index: 1000; width: 100%; height: 8px; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(4px); }
+    .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink)); transition: width 0.12s linear; }
+
+    .lock-overlay { position: fixed; inset: 0; z-index: 2000; background: linear-gradient(145deg, #dbefff, #ffe8c9); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .lock-card { width: min(460px, 100%); background: var(--panel); border: 2px solid var(--neon-cyan); border-radius: 12px; padding: 1.5rem; box-shadow: 0 0 24px rgba(42, 157, 143, 0.22); }
+
+    .page { width: min(1100px, 96vw); margin: 10px auto 20px; display: grid; gap: 10px; }
+    .panel { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border: 1px solid rgba(42, 157, 143, 0.35); border-radius: 10px; padding: 1.2rem; }
+
+    .top-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .date-stamp { font-weight: 700; color: var(--accent); padding: 8px; border-radius: 8px; border: 1px solid rgba(255, 159, 28, 0.6); background: rgba(255, 159, 28, 0.12); text-align: center; }
+
+    .article-row { display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-bottom: 15px; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 8px; border: 1px solid #ddd; }
+    .article-text { font-size: var(--article-size); line-height: 1.6; }
+    .pnum { color: var(--neon-pink); font-weight: bold; margin-right: 5px; }
+
+    button { cursor: pointer; border-radius: 5px; border: 1px solid var(--neon-cyan); padding: 5px 10px; background: #fff; font-weight: bold; }
+    textarea { width: 100%; border: 1px solid var(--neon-pink); border-radius: 5px; padding: 10px; font-family: inherit; resize: vertical; }
+
+    .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .support-card { background: #eef6ff; padding: 10px; border-radius: 8px; border-left: 5px solid var(--neon-cyan); }
+
+    @media (max-width: 800px) { .article-row, .top-grid, .support-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="locked">
+
+  <div class="progress-wrap"><div id="progressBar" class="progress-bar"></div></div>
+
+  <div id="lockOverlay" class="lock-overlay">
+    <div class="lock-card">
+      <h2>Welcome, Colonists!</h2>
+      <p>Enter the class passcode to begin the photography series.</p>
+      <input id="passcodeInput" type="text" placeholder="Passcode" style="width:100%; padding:10px; margin-bottom:10px; border: 2px solid var(--neon-cyan); border-radius: 5px;">
+      <button id="unlockBtn" style="width:100%; background: var(--neon-cyan); color: white;">Start Lesson</button>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="panel">
+      <div class="top-grid">
+        <div class="field"><label>Student Name</label><input type="text" placeholder="First & Last Name"></div>
+        <div class="field"><label>Period</label><input type="text" placeholder="e.g. 3rd"></div>
+        <div id="dateStamp" class="date-stamp">February 2026</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h1>Article of the Week: Anaheim Through the Lens</h1>
+      <p><strong>By Javier Uribe and Jonathon F. Negrete</strong> | Published February 23, 2026</p>
+      <div style="font-size: 0.8rem; color: var(--muted);">
+        Standards: RI.9-10.1 (Evidence), RI.9-10.2 (Central Idea), W.9-10.4 (Clear Writing)
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>UDL Vocabulary & Support</h3>
+      <div class="support-grid">
+        <div class="support-card">
+          <strong>Key Terms</strong>
+          <p><strong>Nostalgia:</strong> A sentimental longing for the past.</p>
+          <p><strong>Grueling:</strong> Extremely tiring and demanding.</p>
+        </div>
+        <div class="support-card">
+          <strong>Photography Term</strong>
+          <p><strong>Lens:</strong> The part of a camera that focuses light; also a way of "seeing" the world.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3>T4: Talk to the Text (Annotations)</h3>
+      
+      <div class="article-row">
+        <div class="article-text" id="p1">
+          <p><span class="pnum">1.</span> Anaheim Through the Lens is a series to pay attention to details of this high school. From the different great styles to the beautiful new football field. Even to the cute orange cat that walks around our campus. <button onclick="speak('p1')">🔊</button></p>
+          <p><span class="pnum">2.</span> Our campus is full of amazing and exciting details most of us never notice. So we walked with our cameras to notice them. In this article I will also go over what it means to be a photographer at Anaheim High School. <button onclick="speak('p2')">🔊</button></p>
+        </div>
+        <div>
+          <label><strong>Annotation:</strong></label>
+          <textarea placeholder="Identify one 'detail' the authors mention. Why do most people miss these?"></textarea>
+        </div>
+      </div>
+
+      <div class="article-row">
+        <div class="article-text" id="p3">
+          <p><span class="pnum">3.</span> The beautiful details are what make this school special. A very famous and cute detail is the adorable orange cat that roams our campus daily, walking around from one area to another. Even relaxing at tables with fellow students. The cat gets too comfortable sometimes he even falls asleep at the lunch tables. <button onclick="speak('p3')">🔊</button></p>
+        </div>
+        <div>
+          <label><strong>Annotation:</strong></label>
+          <textarea placeholder="What does the cat's presence tell us about the 'vibe' of the campus?"></textarea>
+        </div>
+      </div>
+
+      <div class="article-row">
+        <div class="article-text" id="p4">
+          <p><span class="pnum">4.</span> A new football and track field is a new start to the careers of the future generations. The future generation will remember running this new state of the art track. Our future football players will remember their grueling practice. This is a place where we create nostalgia and memories. <button onclick="speak('p4')">🔊</button></p>
+        </div>
+        <div>
+          <label><strong>Annotation:</strong></label>
+          <textarea placeholder="How does a new field help 'future generations'?"></textarea>
+        </div>
+      </div>
+
+      <div class="article-row">
+        <div class="article-text" id="p5">
+          <p><span class="pnum">5.</span> In conclusion, what it means to be a photographer at Anaheim High School is to look around from the unexpected cats to the expected football field bringing us happiness. To see amazing outfits or the first thing people saw when they woke up. Every part of this school has a story; we just have to look deeper. <button onclick="speak('p5')">🔊</button></p>
+        </div>
+        <div>
+          <label><strong>Annotation:</strong></label>
+          <textarea placeholder="Central Idea: What is the main message about being a photographer?"></textarea>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="panel">
+      <h3>Final Analysis: Student Choice</h3>
+      <p>Select one option to show your understanding:</p>
+      <select style="width:100%; padding:10px; margin-bottom:10px;">
+        <option>Option 1: Describe a 'hidden detail' you would photograph at AHS.</option>
+        <option>Option 2: Explain why 'looking deeper' is important for students.</option>
+      </select>
+      <textarea rows="4" placeholder="Type your response here..."></textarea>
+    </section>
+
+    <button style="width: 100%; padding: 15px; background: var(--accent); color: white; border: none; font-size: 1.2rem;">Submit Assignment (PDF)</button>
+  </main>
+
+  <script>
+    // Unlock Function
+    document.getElementById('unlockBtn').onclick = function() {
+      const code = document.getElementById('passcodeInput').value;
+      if(code.toLowerCase() === 'mrsrapp') {
+        document.getElementById('lockOverlay').style.display = 'none';
+        document.body.classList.remove('locked');
+      } else {
+        alert('Incorrect Passcode.');
+      }
+    };
+
+    // Simple Text to Speech
+    function speak(id) {
+      const text = document.getElementById(id).innerText;
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utterance);
+    }
+
+    // Date
+    document.getElementById('dateStamp').innerText = new Date().toLocaleDateString();
+  </script>
+</body>
+</html>
