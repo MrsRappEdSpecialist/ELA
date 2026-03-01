@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article of the Week: Night by Elie Wiesel</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&amp;family=Rajdhani:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    @keyframes neonPulse {
+      0%, 100% { box-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff; }
+      50% { box-shadow: 0 0 10px #f0f, 0 0 20px #f0f, 0 0 40px #f0f; }
+    }
+    @keyframes glitch {
+      0%, 90%, 100% { transform: translate(0); }
+      92% { transform: translate(-2px, 2px); }
+      94% { transform: translate(2px, -2px); }
+      96% { transform: translate(-2px, -2px); }
+      98% { transform: translate(2px, 2px); }
+    }
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    .neon-text { text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff; }
+    .neon-pink { text-shadow: 0 0 10px #f0f, 0 0 20px #f0f, 0 0 30px #f0f; }
+    .neon-border { border: 2px solid #0ff; box-shadow: 0 0 10px #0ff, inset 0 0 10px rgba(0,255,255,0.1); }
+    .neon-border-pink { border: 2px solid #f0f; box-shadow: 0 0 10px #f0f, inset 0 0 10px rgba(255,0,255,0.1); }
+    .cyber-input { background: rgba(0,0,0,0.8); border: 2px solid #0ff; color: #0ff; }
+    .cyber-input:focus { box-shadow: 0 0 20px #0ff; outline: none; }
+    .highlight-cyan { background: rgba(0,255,255,0.3); border-radius: 2px; cursor: pointer; }
+    .highlight-pink { background: rgba(255,0,255,0.3); border-radius: 2px; cursor: pointer; }
+    .highlight-yellow { background: rgba(255,255,0,0.3); border-radius: 2px; cursor: pointer; }
+    .dyslexia-font * { font-family: 'Comic Sans MS', cursive !important; }
+    .high-contrast { filter: grayscale(100%) contrast(200%); }
+    .reading-ruler {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0,255,255,0.2) 50%, transparent 100%);
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+    }
+    .reading-ruler.active { display: block; }
+    @media print {
+      textarea { display: none !important; }
+      .print-box { display: block !important; white-space: pre-wrap; border: 1px solid #000; padding: 10px; margin: 5px 0; min-height: 50px; }
+      .no-print { display: none !important; }
+      * { color: #000 !important; background: #fff !important; text-shadow: none !important; box-shadow: none !important; }
+    }
+    .print-box { display: none; }
+    .vocab-feedback { animation: neonPulse 2s infinite; }
+    .scanline::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(transparent 50%, rgba(0,0,0,0.1) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gray-950 text-cyan-300 overflow-x-hidden" style="font-family: 'Rajdhani', sans-serif;"><!-- Lock Screen -->
+  <div id="lockScreen" class="fixed inset-0 bg-black flex items-center justify-center" style="z-index: 20000;">
+   <div class="scanline relative p-8 neon-border rounded-lg bg-gray-950 text-center max-w-md w-full mx-4">
+    <div class="absolute inset-0 overflow-hidden rounded-lg pointer-events-none">
+     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent" style="animation: scanline 3s linear infinite;"></div>
+    </div>
+    <h1 class="text-4xl font-bold neon-text mb-2" style="font-family: 'Orbitron', sans-serif; animation: glitch 3s infinite;">SYSTEM LOCKED</h1>
+    <p class="text-cyan-400 mb-6">Enter access code to proceed</p><input type="password" id="passcodeInput" class="cyber-input w-full p-3 rounded-lg text-center text-xl tracking-widest mb-4" placeholder="• • • •" maxlength="20"> <button id="unlockBtn" class="w-full py-3 px-6 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-lg font-bold text-white hover:from-cyan-500 hover:to-purple-500 transition-all" style="font-family: 'Orbitron', sans-serif;"> ACCESS SYSTEM </button>
+    <p id="lockError" class="text-red-500 mt-4 hidden">⚠️ ACCESS DENIED - Invalid passcode</p>
+   </div>
+  </div><!-- Reading Progress Bar -->
+  <div id="progressBar" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-300 no-print" style="z-index: 19000; width: 0%;"></div><!-- Floating Highlighter Menu -->
+  <div id="highlightMenu" class="fixed hidden bg-gray-900 neon-border rounded-lg p-2 flex gap-2 no-print" style="z-index: 15000;"><button class="highlight-btn w-8 h-8 rounded bg-cyan-500/50 hover:bg-cyan-500 transition-all" data-color="cyan" title="Cyan">🔵</button> <button class="highlight-btn w-8 h-8 rounded bg-pink-500/50 hover:bg-pink-500 transition-all" data-color="pink" title="Pink">🟣</button> <button class="highlight-btn w-8 h-8 rounded bg-yellow-500/50 hover:bg-yellow-500 transition-all" data-color="yellow" title="Yellow">🟡</button>
+  </div><!-- Definition Tooltip -->
+  <div id="definitionTooltip" class="fixed hidden bg-gray-900 neon-border-pink rounded-lg p-4 max-w-sm no-print" style="z-index: 15001;">
+   <p class="text-pink-400 font-bold mb-1" id="tooltipWord"></p>
+   <p class="text-cyan-300 text-sm" id="tooltipDef"></p>
+  </div><!-- Reading Ruler -->
+  <div id="readingRuler" class="reading-ruler"></div><!-- Accessibility Panel -->
+  <div id="accessPanel" class="fixed right-4 top-16 bg-gray-900/95 neon-border rounded-lg p-4 hidden no-print" style="z-index: 10000;">
+   <h3 class="text-cyan-400 font-bold mb-3" style="font-family: 'Orbitron', sans-serif;">⚙️ ACCESSIBILITY</h3>
+   <div class="space-y-3"><label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" id="dyslexiaToggle" class="w-4 h-4 accent-cyan-500"> <span>Dyslexia Font</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" id="contrastToggle" class="w-4 h-4 accent-cyan-500"> <span>High Contrast</span> </label> <label class="flex items-center gap-2 cursor-pointer"> <input type="checkbox" id="rulerToggle" class="w-4 h-4 accent-cyan-500"> <span>Reading Ruler</span> </label>
+    <div class="flex items-center gap-2"><span>Font Size:</span> <button id="fontMinus" class="w-8 h-8 bg-cyan-600 rounded hover:bg-cyan-500">-</button> <span id="fontSizeDisplay">16</span> <button id="fontPlus" class="w-8 h-8 bg-cyan-600 rounded hover:bg-cyan-500">+</button>
+    </div>
+   </div>
+  </div><!-- Main Content -->
+  <main id="mainContent" class="hidden h-full overflow-auto">
+   <div class="max-w-4xl mx-auto p-6"><!-- Header -->
+    <header class="mb-8 neon-border rounded-lg p-6 bg-gray-900/80">
+     <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
+      <div>
+       <h1 class="text-3xl md:text-4xl font-bold neon-text" style="font-family: 'Orbitron', sans-serif;">ARTICLE OF THE WEEK</h1>
+       <h2 class="text-2xl text-pink-400 neon-pink mt-2">Night by Elie Wiesel</h2>
+       <p class="text-cyan-500 text-sm mt-1">Chapters 1-9 Analysis</p>
+      </div>
+      <div class="text-right">
+       <p class="text-cyan-400 text-sm" id="dateStamp"></p><button id="accessToggle" class="mt-2 px-3 py-1 bg-purple-600 rounded text-sm hover:bg-purple-500 no-print">⚙️ A11y</button>
+      </div>
+     </div>
+     <div class="grid md:grid-cols-2 gap-4">
+      <div><label class="text-cyan-500 text-sm">Student Name:</label> <input type="text" id="studentName" class="cyber-input w-full p-2 rounded-lg mt-1" placeholder="Enter your name" data-save="studentName">
+      </div>
+      <div><label class="text-cyan-500 text-sm">Period:</label> <input type="text" id="periodInput" class="cyber-input w-full p-2 rounded-lg mt-1" placeholder="Period #" data-save="period">
+      </div>
+     </div>
+    </header><!-- Article Content -->
+    <article id="articleContent" class="neon-border rounded-lg p-6 bg-gray-900/80 mb-8">
+     <h3 class="text-xl font-bold text-pink-400 mb-4" style="font-family: 'Orbitron', sans-serif;">📖 READING PASSAGE</h3>
+     <div class="space-y-4 text-cyan-100 leading-relaxed article-text">
+      <p class="paragraph" data-para="1"><button class="tts-btn text-lg mr-2 hover:scale-110 transition-transform no-print" data-para="1">🔊</button> <span class="para-text">Elie Wiesel's memoir "Night" stands as one of the most powerful testimonies of the Holocaust. Written from the perspective of a young Jewish boy from Sighet, Transylvania, the narrative chronicles Eliezer's harrowing journey through Nazi concentration camps. The memoir begins in 1941 when Eliezer is just twelve years old, deeply devoted to his Jewish faith and eager to study the Kabbalah, the Jewish mystical tradition. His spiritual guide, Moishe the Beadle, becomes an early harbinger of the horrors to come when he is deported and witnesses mass executions, yet the townspeople dismiss his warnings as the ravings of a madman.</span></p>
+      <p class="paragraph" data-para="2"><button class="tts-btn text-lg mr-2 hover:scale-110 transition-transform no-print" data-para="2">🔊</button> <span class="para-text">The transformation of Eliezer's world begins gradually, then catastrophically. In 1944, the Germans arrive in Sighet, and the Jewish community is forced into ghettos before being transported to Auschwitz-Birkenau. Upon arrival, Eliezer and his father are separated from his mother and younger sister—a separation that proves permanent. The infamous selection process introduces them to Dr. Josef Mengele, the "Angel of Death," and they witness the crematoriums where countless innocents meet their end. Wiesel's prose captures this moment with devastating simplicity: "Never shall I forget that night, the first night in camp, which has turned my life into one long night."</span></p><!-- Image Placeholder 2: Train tracks/railway -->
+      <figure class="my-6"><img src="https://images.unsplash.com/m9h1ZcpoM14?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Railway tracks representing deportation" class="w-full h-40 object-cover rounded-lg neon-border-pink" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #1a0a1a 0%, #2d1a2d 100%)'; this.alt='Image unavailable';"> <!-- IMAGE 2: Replace PHOTO_ID_HERE with train tracks, railway, or path imagery -->
+       <figcaption class="text-pink-600 text-xs mt-2 text-center">
+        Railways symbolizing the journey to the camps
+       </figcaption>
+      </figure>
+      <p class="paragraph" data-para="3"><button class="tts-btn text-lg mr-2 hover:scale-110 transition-transform no-print" data-para="3">🔊</button> <span class="para-text">Throughout the narrative, Wiesel explores the deterioration of human relationships under extreme duress. The bond between Eliezer and his father, Shlomo, becomes central to the story. While their relationship provides mutual support, Eliezer also grapples with moments of resentment and guilt—feeling burdened by his weakening father, then hating himself for such thoughts. This internal conflict reaches its climax during the death march from Buna to Buchenwald, where prisoners are forced to run for miles in freezing conditions. Sons abandon fathers, and the veneer of civilization is stripped away, revealing humanity's capacity for both cruelty and sacrifice.</span></p>
+      <p class="paragraph" data-para="4"><button class="tts-btn text-lg mr-2 hover:scale-110 transition-transform no-print" data-para="4">🔊</button> <span class="para-text">Wiesel's faith undergoes a profound crisis throughout "Night." The devout boy who once wept during prayer finds himself questioning—and ultimately rebelling against—God. During the hanging of a young pipel (a child servant), a prisoner asks, "Where is God now?" Eliezer hears a voice within him answer: "He is hanging here on this gallows." This moment represents not atheism, but a transformed relationship with the divine—one marked by accusation and anguish rather than simple belief or disbelief. The theological questions raised in "Night" continue to resonate with readers grappling with the problem of evil and suffering.</span></p>
+      <p class="paragraph" data-para="5"><button class="tts-btn text-lg mr-2 hover:scale-110 transition-transform no-print" data-para="5">🔊</button> <span class="para-text">The memoir concludes with the liberation of Buchenwald in April 1945. Eliezer's father dies just weeks before the camp is freed, succumbing to dysentery and exhaustion while calling out his son's name. After liberation, Eliezer looks at himself in a mirror for the first time since leaving Sighet. "From the depths of the mirror, a corpse gazed back at me," he writes. "The look in his eyes, as they stared into mine, has never left me." This haunting final image encapsulates the memoir's central themes: the destruction of innocence, the death of faith, and the transformation of identity under conditions of absolute dehumanization.</span></p>
+     </div>
+    </article><!-- Vocabulary Section -->
+    <section class="neon-border-pink rounded-lg p-6 bg-gray-900/80 mb-8">
+     <h3 class="text-xl font-bold text-pink-400 mb-4" style="font-family: 'Orbitron', sans-serif;">📚 VOCABULARY ANALYSIS</h3>
+     <div class="space-y-6"><!-- Vocab 1 -->
+      <div class="vocab-item p-4 bg-gray-950 rounded-lg border border-cyan-800">
+       <p class="text-cyan-400 font-bold mb-2">1. HARBINGER (noun)</p>
+       <p class="text-cyan-200 text-sm mb-3 italic">"His spiritual guide, Moishe the Beadle, becomes an early harbinger of the horrors to come..."</p>
+       <p class="text-cyan-300 mb-3">Based on context, what does "harbinger" most likely mean?</p>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-2"><button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="1" data-correct="false">A) A religious teacher or mentor</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="1" data-correct="true">B) A sign or warning of something to come</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="1" data-correct="false">C) A survivor of a tragic event</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="1" data-correct="false">D) A person who refuses to believe</button>
+       </div>
+       <div id="vocabFeedback1" class="hidden mt-3 p-3 rounded-lg"></div>
+      </div><!-- Vocab 2 -->
+      <div class="vocab-item p-4 bg-gray-950 rounded-lg border border-pink-800">
+       <p class="text-pink-400 font-bold mb-2">2. DEHUMANIZATION (noun)</p>
+       <p class="text-pink-200 text-sm mb-3 italic">"...the transformation of identity under conditions of absolute dehumanization."</p>
+       <p class="text-pink-300 mb-3">Which definition best fits "dehumanization" in this context?</p>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-2"><button class="vocab-choice p-2 bg-gray-800 rounded border border-pink-700 hover:border-pink-400 text-left transition-all" data-vocab="2" data-correct="false">A) The process of becoming physically weaker</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-pink-700 hover:border-pink-400 text-left transition-all" data-vocab="2" data-correct="false">B) Forgetting one's cultural heritage</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-pink-700 hover:border-pink-400 text-left transition-all" data-vocab="2" data-correct="true">C) Stripping away human dignity and qualities</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-pink-700 hover:border-pink-400 text-left transition-all" data-vocab="2" data-correct="false">D) The loss of religious faith</button>
+       </div>
+       <div id="vocabFeedback2" class="hidden mt-3 p-3 rounded-lg"></div>
+      </div><!-- Vocab 3 -->
+      <div class="vocab-item p-4 bg-gray-950 rounded-lg border border-cyan-800">
+       <p class="text-cyan-400 font-bold mb-2">3. VENEER (noun)</p>
+       <p class="text-cyan-200 text-sm mb-3 italic">"...the veneer of civilization is stripped away, revealing humanity's capacity for both cruelty and sacrifice."</p>
+       <p class="text-cyan-300 mb-3">In this sentence, "veneer" most likely means:</p>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-2"><button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="3" data-correct="true">A) A thin outer layer or false appearance</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="3" data-correct="false">B) The core beliefs of a society</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="3" data-correct="false">C) A protective shield</button> <button class="vocab-choice p-2 bg-gray-800 rounded border border-cyan-700 hover:border-cyan-400 text-left transition-all" data-vocab="3" data-correct="false">D) A type of wooden furniture</button>
+       </div>
+       <div id="vocabFeedback3" class="hidden mt-3 p-3 rounded-lg"></div>
+      </div>
+     </div>
+    </section><!-- Comprehension Questions (The 5Cs) -->
+    <section class="neon-border rounded-lg p-6 bg-gray-900/80 mb-8">
+     <h3 class="text-xl font-bold text-cyan-400 mb-4" style="font-family: 'Orbitron', sans-serif;">🧠 CRITICAL THINKING (The 5Cs)</h3><!-- Question 1: Characterization -->
+     <div class="question-block mb-6 p-4 bg-gray-950 rounded-lg border-l-4 border-cyan-500">
+      <div class="flex items-start gap-2 mb-2"><span class="px-2 py-1 bg-cyan-600 rounded text-xs font-bold">RL.9-10.3</span> <span class="text-cyan-500 text-xs">CHARACTERIZATION</span>
+      </div>
+      <p class="text-cyan-100 font-bold mb-3">1. How does Eliezer's relationship with his father change throughout "Night"? Use specific evidence from the text to support your analysis.</p><textarea class="cyber-input w-full p-3 rounded-lg resize-none" rows="1" placeholder="Begin your response here..." data-save="q1"></textarea>
+      <div class="flex gap-2 mt-2 flex-wrap">
+       <button class="hint-btn px-3 py-1 bg-purple-700 rounded text-sm hover:bg-purple-600 no-print" data-question="1">💡 Need Help?</button> <button class="tts-response-btn px-3 py-1 bg-blue-700 rounded text-sm hover:bg-blue-600 no-print" data-response="q1">🔊 Read Aloud</button> <button class="feedback-btn px-3 py-1 bg-green-700 rounded text-sm hover:bg-green-600 no-print" data-question="1">💬 Feedback</button> <button class="revise-btn px-3 py-1 bg-yellow-700 rounded text-sm hover:bg-yellow-600 no-print" data-question="1">✏️ Revise</button>
+      </div>
+      <div id="hints1" class="mt-2 space-y-2 text-sm"></div>
+      <div id="feedback1" class="hidden mt-3 p-3 rounded-lg bg-blue-900/30 border border-blue-500"></div>
+     </div><!-- Question 2: Conflict -->
+     <div class="question-block mb-6 p-4 bg-gray-950 rounded-lg border-l-4 border-pink-500">
+      <div class="flex items-start gap-2 mb-2"><span class="px-2 py-1 bg-pink-600 rounded text-xs font-bold">RL.9-10.2</span> <span class="text-pink-500 text-xs">CONFLICT</span>
+      </div>
+      <p class="text-pink-100 font-bold mb-3">2. Identify the internal conflict Eliezer experiences regarding his faith. How does Wiesel use this conflict to develop the memoir's central themes?</p><textarea class="cyber-input w-full p-3 rounded-lg resize-none border-pink-500" rows="1" placeholder="Begin your response here..." data-save="q2"></textarea>
+      <div class="flex gap-2 mt-2 flex-wrap">
+       <button class="hint-btn px-3 py-1 bg-purple-700 rounded text-sm hover:bg-purple-600 no-print" data-question="2">💡 Need Help?</button> <button class="tts-response-btn px-3 py-1 bg-blue-700 rounded text-sm hover:bg-blue-600 no-print" data-response="q2">🔊 Read Aloud</button> <button class="feedback-btn px-3 py-1 bg-green-700 rounded text-sm hover:bg-green-600 no-print" data-question="2">💬 Feedback</button> <button class="revise-btn px-3 py-1 bg-yellow-700 rounded text-sm hover:bg-yellow-600 no-print" data-question="2">✏️ Revise</button>
+      </div>
+      <div id="hints2" class="mt-2 space-y-2 text-sm"></div>
+      <div id="feedback2" class="hidden mt-3 p-3 rounded-lg bg-blue-900/30 border border-blue-500"></div>
+     </div><!-- Question 3: Context -->
+     <div class="question-block mb-6 p-4 bg-gray-950 rounded-lg border-l-4 border-cyan-500">
+      <div class="flex items-start gap-2 mb-2"><span class="px-2 py-1 bg-cyan-600 rounded text-xs font-bold">RL.9-10.6</span> <span class="text-cyan-500 text-xs">CONTEXT &amp; PERSPECTIVE</span>
+      </div>
+      <p class="text-cyan-100 font-bold mb-3">3. Why do you think the townspeople of Sighet ignored Moishe the Beadle's warnings? What does this reveal about human nature and the historical context?</p><textarea class="cyber-input w-full p-3 rounded-lg resize-none" rows="1" placeholder="Begin your response here..." data-save="q3"></textarea>
+      <div class="flex gap-2 mt-2 flex-wrap">
+       <button class="hint-btn px-3 py-1 bg-purple-700 rounded text-sm hover:bg-purple-600 no-print" data-question="3">💡 Need Help?</button> <button class="tts-response-btn px-3 py-1 bg-blue-700 rounded text-sm hover:bg-blue-600 no-print" data-response="q3">🔊 Read Aloud</button> <button class="feedback-btn px-3 py-1 bg-green-700 rounded text-sm hover:bg-green-600 no-print" data-question="3">💬 Feedback</button> <button class="revise-btn px-3 py-1 bg-yellow-700 rounded text-sm hover:bg-yellow-600 no-print" data-question="3">✏️ Revise</button>
+      </div>
+      <div id="hints3" class="mt-2 space-y-2 text-sm"></div>
+      <div id="feedback3" class="hidden mt-3 p-3 rounded-lg bg-blue-900/30 border border-blue-500"></div>
+     </div><!-- Question 4: Craft -->
+     <div class="question-block mb-6 p-4 bg-gray-950 rounded-lg border-l-4 border-pink-500">
+      <div class="flex items-start gap-2 mb-2"><span class="px-2 py-1 bg-pink-600 rounded text-xs font-bold">RL.9-10.4</span> <span class="text-pink-500 text-xs">AUTHOR'S CRAFT</span>
+      </div>
+      <p class="text-pink-100 font-bold mb-3">4. Analyze Wiesel's use of the mirror image in the memoir's final scene. What is the significance of Eliezer seeing "a corpse" instead of himself?</p><textarea class="cyber-input w-full p-3 rounded-lg resize-none border-pink-500" rows="1" placeholder="Begin your response here..." data-save="q4"></textarea>
+      <div class="flex gap-2 mt-2 flex-wrap">
+       <button class="hint-btn px-3 py-1 bg-purple-700 rounded text-sm hover:bg-purple-600 no-print" data-question="4">💡 Need Help?</button> <button class="tts-response-btn px-3 py-1 bg-blue-700 rounded text-sm hover:bg-blue-600 no-print" data-response="q4">🔊 Read Aloud</button> <button class="feedback-btn px-3 py-1 bg-green-700 rounded text-sm hover:bg-green-600 no-print" data-question="4">💬 Feedback</button> <button class="revise-btn px-3 py-1 bg-yellow-700 rounded text-sm hover:bg-yellow-600 no-print" data-question="4">✏️ Revise</button>
+      </div>
+      <div id="hints4" class="mt-2 space-y-2 text-sm"></div>
+      <div id="feedback4" class="hidden mt-3 p-3 rounded-lg bg-blue-900/30 border border-blue-500"></div>
+     </div><!-- Question 5: Connection -->
+     <div class="question-block mb-6 p-4 bg-gray-950 rounded-lg border-l-4 border-cyan-500">
+      <div class="flex items-start gap-2 mb-2"><span class="px-2 py-1 bg-cyan-600 rounded text-xs font-bold">RL.9-10.1</span> <span class="text-cyan-500 text-xs">CONNECTION &amp; THEME</span>
+      </div>
+      <p class="text-cyan-100 font-bold mb-3">5. What lessons from "Night" remain relevant today? How can studying the Holocaust help prevent future atrocities?</p><textarea class="cyber-input w-full p-3 rounded-lg resize-none" rows="1" placeholder="Begin your response here..." data-save="q5"></textarea>
+      <div class="flex gap-2 mt-2 flex-wrap">
+       <button class="hint-btn px-3 py-1 bg-purple-700 rounded text-sm hover:bg-purple-600 no-print" data-question="5">💡 Need Help?</button> <button class="tts-response-btn px-3 py-1 bg-blue-700 rounded text-sm hover:bg-blue-600 no-print" data-response="q5">🔊 Read Aloud</button> <button class="feedback-btn px-3 py-1 bg-green-700 rounded text-sm hover:bg-green-600 no-print" data-question="5">💬 Feedback</button> <button class="revise-btn px-3 py-1 bg-yellow-700 rounded text-sm hover:bg-yellow-600 no-print" data-question="5">✏️ Revise</button>
+      </div>
+      <div id="hints5" class="mt-2 space-y-2 text-sm"></div>
+      <div id="feedback5" class="hidden mt-3 p-3 rounded-lg bg-blue-900/30 border border-blue-500"></div>
+     </div>
+    </section><!-- CER Extended Response -->
+    <section class="neon-border-pink rounded-lg p-6 bg-gray-900/80 mb-8">
+     <h3 class="text-xl font-bold text-pink-400 mb-4" style="font-family: 'Orbitron', sans-serif;">✍️ CER EXTENDED RESPONSE</h3>
+     <div class="p-4 bg-gray-950 rounded-lg border border-pink-600">
+      <div class="flex items-start gap-2 mb-2"><span class="px-2 py-1 bg-pink-600 rounded text-xs font-bold">W.9-10.1</span> <span class="px-2 py-1 bg-cyan-600 rounded text-xs font-bold">W.9-10.9</span>
+      </div>
+      <p class="text-pink-100 font-bold mb-4">In "Night," Elie Wiesel writes: "Never shall I forget that night, the first night in camp, which has turned my life into one long night." How does this statement encapsulate the memoir's exploration of trauma, memory, and survival? Write a well-developed response using the CER format.</p><!-- Image Placeholder 3: Night sky/stars -->
+      <figure class="my-4"><img src="https://images.unsplash.com/PHOTO_ID_HERE?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Night sky representing eternal darkness theme" class="w-full h-32 object-cover rounded-lg neon-border" loading="lazy" onerror="this.style.background='linear-gradient(135deg, #0a0a1a 0%, #1a1a3e 50%, #0a0a1a 100%)'; this.alt='Image unavailable';"> <!-- IMAGE 3: Replace PHOTO_ID_HERE with dark night sky, stars, or darkness imagery -->
+       <figcaption class="text-cyan-600 text-xs mt-2 text-center">
+        The eternal night of memory
+       </figcaption>
+      </figure>
+      <div class="space-y-4">
+       <div><label class="text-cyan-400 font-bold block mb-2">📌 CLAIM (Your argument/thesis):</label> <textarea class="cyber-input w-full p-3 rounded-lg resize-none" rows="1" placeholder="State your claim clearly..." data-save="cerClaim"></textarea>
+       </div>
+       <div><label class="text-cyan-400 font-bold block mb-2">📖 EVIDENCE (Quote from text):</label> <textarea class="cyber-input w-full p-3 rounded-lg resize-none" rows="1" placeholder="Provide specific evidence from the passage..." data-save="cerEvidence"></textarea>
+       </div>
+       <div><label class="text-cyan-400 font-bold block mb-2">💭 REASONING (Analysis &amp; explanation):</label> <textarea class="cyber-input w-full p-3 rounded-lg resize-none" rows="1" placeholder="Explain how your evidence supports your claim..." data-save="cerReasoning"></textarea>
+       </div>
+      </div>
+     </div>
+    </section><!-- Submit Section -->
+    <section class="neon-border rounded-lg p-6 bg-gray-900/80 mb-8 no-print">
+     <div class="flex flex-wrap gap-4 justify-between items-center">
+      <div>
+       <h3 class="text-cyan-400 font-bold" style="font-family: 'Orbitron', sans-serif;">SUBMISSION STATUS</h3>
+       <p id="saveStatus" class="text-cyan-600 text-sm">All progress auto-saved ✓</p>
+      </div>
+      <div class="flex gap-3"><button id="clearBtn" class="px-4 py-2 bg-red-700 rounded-lg hover:bg-red-600 transition-all">🗑️ Clear All</button> <button id="submitBtn" class="px-6 py-2 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-lg font-bold hover:from-cyan-500 hover:to-purple-500 transition-all" style="font-family: 'Orbitron', sans-serif;">📄 FINAL SUBMIT (PDF)</button>
+      </div>
+     </div>
+    </section><!-- Footer -->
+    <footer class="text-center text-cyan-700 text-sm pb-8">
+     <p>"For the dead and the living, we must bear witness." — Elie Wiesel</p>
+    </footer>
+   </div>
+  </main>
+  <script>
+    // Configuration
+    const defaultConfig = {
+      article_title: 'Night by Elie Wiesel',
+      teacher_name: '',
+      primary_color: '#00ffff',
+      secondary_color: '#ff00ff',
+      background_color: '#030712',
+      text_color: '#67e8f9',
+      accent_color: '#a855f7',
+      font_family: 'Rajdhani',
+      font_size: 16
+    };
+
+    let config = { ...defaultConfig };
+    let hintStates = {};
+    let highlights = [];
+    let currentFontSize = 16;
+
+    // Progressive Hints Data with Multi-Level Support
+    const hintsData = {
+      1: [
+        { type: 'prompt', text: "🔍 Level 1 - Question Prompt: Think about how their roles shift. Who becomes the caretaker and who becomes dependent?" },
+        { type: 'starter', text: "📝 Level 2 - Sentence Starters:\n• 'The relationship between Eliezer and his father transforms from ___ to ___ as evidenced by...'\n• 'In the beginning, his father ___, but by the end, Eliezer ___.'\n• 'This change reveals that...'" },
+        { type: 'evidence', text: "📖 Level 3 - Key Evidence to Consider:\n• The death march scene where 'sons abandon fathers'\n• His father's death while calling out Eliezer's name\n• Moments when Eliezer feels burdened by his father's weakness\n• Times when his father protects him despite his own suffering" }
+      ],
+      2: [
+        { type: 'prompt', text: "🔍 Level 1 - Question Prompt: What did Eliezer believe about God before the camps? How does witnessing the hanging of the pipel change him?" },
+        { type: 'starter', text: "📝 Level 2 - Sentence Starters:\n• 'Eliezer's crisis of faith stems from...'\n• 'When the prisoner asks \"Where is God now?\" Eliezer's response reveals that...'\n• 'The hanging of the young boy represents a moment when...'" },
+        { type: 'evidence', text: "📖 Level 3 - Key Evidence to Consider:\n• 'Never shall I forget that night...'\n• 'Where is God now?... He is hanging here on this gallows.'\n• Eliezer's early devotion to studying the Kabbalah\n• His silence during prayer after witnessing the hanging" }
+      ],
+      3: [
+        { type: 'prompt', text: "🔍 Level 1 - Question Prompt: Consider denial and disbelief as defense mechanisms. Why might people reject uncomfortable truths?" },
+        { type: 'starter', text: "📝 Level 2 - Sentence Starters:\n• 'The townspeople ignored Moishe's warnings because...'\n• 'Their refusal to believe suggests that humans often...'\n• 'This demonstrates how normalcy bias causes people to...'" },
+        { type: 'evidence', text: "📖 Level 3 - Key Evidence to Consider:\n• Moishe is dismissed as 'mad'\n• The townspeople were living normal lives before 1944\n• People often can't imagine atrocities until they occur\n• Fear and wishful thinking can override evidence" }
+      ],
+      4: [
+        { type: 'prompt', text: "🔍 Level 1 - Question Prompt: What has died inside Eliezer by the end of the memoir? Consider both his physical and spiritual transformation." },
+        { type: 'starter', text: "📝 Level 2 - Sentence Starters:\n• 'When Eliezer sees a corpse in the mirror, Wiesel suggests that...'\n• 'The final image symbolizes...'\n• 'This transformation reveals that the Holocaust destroyed not only...'" },
+        { type: 'evidence', text: "📖 Level 3 - Key Evidence to Consider:\n• 'From the depths of the mirror, a corpse gazed back at me.'\n• His physical emaciation after liberation\n• The death of his father before the camp's liberation\n• His loss of faith and spiritual identity" }
+      ],
+      5: [
+        { type: 'prompt', text: "🔍 Level 1 - Question Prompt: What lessons from the Holocaust remain important today? How can studying genocide help prevent future atrocities?" },
+        { type: 'starter', text: "📝 Level 2 - Sentence Starters:\n• 'Night teaches us that we must...'\n• 'By studying the Holocaust, society can...'\n• 'Wiesel's testimony matters today because...'" },
+        { type: 'evidence', text: "📖 Level 3 - Key Evidence/Examples:\n• Warning signs: propaganda, dehumanizing language, gradual restrictions\n• The importance of bearing witness and remembering\n• Recognizing patterns of genocide in Rwanda, Darfur, Myanmar\n• Speaking up against injustice before it escalates" }
+      ]
+    };
+
+    // Vocabulary Feedback
+    const vocabFeedback = {
+      1: {
+        correct: "✅ Correct! A harbinger is indeed a sign or warning of something to come. Moishe warns the townspeople about the Nazi atrocities he witnessed, making him a harbinger of the horrors that would soon reach Sighet.",
+        incorrect: {
+          A: "❌ While Moishe does serve as a spiritual guide, 'harbinger' specifically refers to something that signals or foreshadows future events. The text says he 'becomes a harbinger of the horrors to come'—he warns about what will happen.",
+          C: "❌ A survivor is someone who lives through an event. 'Harbinger' means a sign or warning of something that hasn't happened yet to the main characters. Moishe's role is to warn, not just to have survived.",
+          D: "❌ The text shows the opposite—Moishe desperately wants people to believe him. A harbinger is a warning sign or forerunner of events, not a skeptic."
+        }
+      },
+      2: {
+        correct: "✅ Correct! Dehumanization refers to stripping away human dignity and qualities—treating people as objects or animals rather than human beings. The Nazis systematically dehumanized their victims through numbers, conditions, and treatment.",
+        incorrect: {
+          A: "❌ While physical weakness occurs, dehumanization is specifically about the loss of human dignity and being treated as less than human. It's psychological and social, not just physical.",
+          B: "❌ Cultural heritage loss is different from dehumanization. Dehumanization means treating people as non-human, stripping away their basic dignity and rights.",
+          D: "❌ Loss of faith is a separate theme in the memoir. Dehumanization specifically refers to being stripped of human qualities and dignity through systematic abuse and degradation."
+        }
+      },
+      3: {
+        correct: "✅ Correct! A veneer is a thin outer layer or deceptive appearance. Wiesel suggests that civilized behavior is just a thin coating over humanity's darker nature, which extreme conditions can expose.",
+        incorrect: {
+          B: "❌ Core beliefs would be the opposite of a veneer. A veneer is superficial—it's the surface appearance, not the deep foundation. The text implies civilization is only skin-deep.",
+          C: "❌ A veneer isn't protective—it's merely decorative or superficial. The point is that 'civilized' behavior is easily stripped away under extreme conditions.",
+          D: "❌ While veneer can refer to thin wood paneling, in this context it's used metaphorically. The 'veneer of civilization' means the thin appearance of civilized behavior."
+        }
+      }
+    };
+
+    // Simple dictionary for definitions
+    const dictionary = {
+      'holocaust': 'The systematic persecution and murder of six million Jews by the Nazi regime during World War II.',
+      'memoir': 'A historical account written from personal knowledge or experience.',
+      'kabbalah': 'The ancient Jewish tradition of mystical interpretation of the Bible.',
+      'transylvania': 'A historical region in central Romania, formerly part of Hungary.',
+      'auschwitz': 'The largest Nazi concentration camp complex, located in occupied Poland.',
+      'birkenau': 'Also known as Auschwitz II, the extermination camp where most victims were killed.',
+      'crematoriums': 'Furnaces used to burn dead bodies, used by Nazis for mass disposal of victims.',
+      'pipel': 'A young male servant or assistant in concentration camps, often a child.',
+      'buchenwald': 'A Nazi concentration camp in Germany where Elie and his father were held.',
+      'dysentery': 'A serious intestinal infection causing severe diarrhea, common in the camps.',
+      'atrocities': 'Extremely cruel or wicked acts, typically involving physical violence.',
+      'testimony': 'A formal statement, especially one given in a court of law or as evidence.',
+      'theological': 'Relating to the study of religious belief and theory.'
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeLockScreen();
+      initializeDate();
+      loadSavedData();
+      initializeProgressBar();
+      initializeHighlighter();
+      initializeDefinitions();
+      initializeTTS();
+      initializeAccessibility();
+      initializeVocab();
+      initializeHints();
+      initializeTextareas();
+      initializeResponseTTS();
+      initializeFeedback();
+      initializeRevise();
+      initializeSubmit();
+    });
+
+    // Lock Screen
+    function initializeLockScreen() {
+      const lockScreen = document.getElementById('lockScreen');
+      const mainContent = document.getElementById('mainContent');
+      const passcodeInput = document.getElementById('passcodeInput');
+      const unlockBtn = document.getElementById('unlockBtn');
+      const lockError = document.getElementById('lockError');
+
+      // Check if already unlocked
+      if (localStorage.getItem('nightUnlocked') === 'true') {
+        lockScreen.classList.add('hidden');
+        mainContent.classList.remove('hidden');
+        document.body.style.overflow = 'auto';
+        return;
+      }
+
+      document.body.style.overflow = 'hidden';
+
+      function attemptUnlock() {
+        if (passcodeInput.value.toLowerCase() === 'rapp') {
+          localStorage.setItem('nightUnlocked', 'true');
+          lockScreen.style.animation = 'glitch 0.5s forwards';
+          setTimeout(() => {
+            lockScreen.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            document.body.style.overflow = 'auto';
+          }, 500);
+        } else {
+          lockError.classList.remove('hidden');
+          passcodeInput.classList.add('border-red-500');
+          passcodeInput.value = '';
+          setTimeout(() => {
+            lockError.classList.add('hidden');
+            passcodeInput.classList.remove('border-red-500');
+          }, 2000);
+        }
+      }
+
+      unlockBtn.addEventListener('click', attemptUnlock);
+      passcodeInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') attemptUnlock();
+      });
+    }
+
+    // Date Stamp
+    function initializeDate() {
+      const dateStamp = document.getElementById('dateStamp');
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      dateStamp.textContent = now.toLocaleDateString('en-US', options);
+    }
+
+    // Progress Bar
+    function initializeProgressBar() {
+      const progressBar = document.getElementById('progressBar');
+      const mainContent = document.getElementById('mainContent');
+      
+      mainContent.addEventListener('scroll', () => {
+        const scrollTop = mainContent.scrollTop;
+        const scrollHeight = mainContent.scrollHeight - mainContent.clientHeight;
+        const progress = (scrollTop / scrollHeight) * 100;
+        progressBar.style.width = `${Math.min(progress, 100)}%`;
+      });
+    }
+
+    // Highlighter System
+    function initializeHighlighter() {
+      const menu = document.getElementById('highlightMenu');
+      const articleContent = document.getElementById('articleContent');
+      
+      // Load saved highlights
+      highlights = JSON.parse(localStorage.getItem('nightHighlights') || '[]');
+      applyHighlights();
+
+      document.addEventListener('mouseup', (e) => {
+        const selection = window.getSelection();
+        const selectedText = selection.toString().trim();
+        
+        if (selectedText && articleContent.contains(selection.anchorNode)) {
+          const range = selection.getRangeAt(0);
+          const rect = range.getBoundingClientRect();
+          
+          menu.style.left = `${rect.left + (rect.width / 2) - 60}px`;
+          menu.style.top = `${rect.top - 50 + window.scrollY}px`;
+          menu.classList.remove('hidden');
+        } else if (!menu.contains(e.target)) {
+          menu.classList.add('hidden');
+        }
+      });
+
+      document.querySelectorAll('.highlight-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const color = btn.dataset.color;
+          const selection = window.getSelection();
+          const selectedText = selection.toString().trim();
+          
+          if (selectedText) {
+            highlights.push({ text: selectedText, color: color });
+            localStorage.setItem('nightHighlights', JSON.stringify(highlights));
+            applyHighlights();
+            selection.removeAllRanges();
+          }
+          menu.classList.add('hidden');
+        });
+      });
+    }
+
+    function applyHighlights() {
+      document.querySelectorAll('.para-text').forEach(para => {
+        let html = para.textContent;
+        highlights.forEach((h, index) => {
+          const regex = new RegExp(`(${escapeRegex(h.text)})`, 'gi');
+          html = html.replace(regex, `<span class="highlight-${h.color}" data-highlight-index="${index}">$1</span>`);
+        });
+        para.innerHTML = html;
+      });
+
+      // Add click handlers to remove highlights
+      document.querySelectorAll('[data-highlight-index]').forEach(span => {
+        span.addEventListener('click', () => {
+          const index = parseInt(span.dataset.highlightIndex);
+          highlights.splice(index, 1);
+          localStorage.setItem('nightHighlights', JSON.stringify(highlights));
+          applyHighlights();
+        });
+      });
+    }
+
+    function escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Click-to-Define
+    function initializeDefinitions() {
+      const tooltip = document.getElementById('definitionTooltip');
+      const tooltipWord = document.getElementById('tooltipWord');
+      const tooltipDef = document.getElementById('tooltipDef');
+      const articleContent = document.getElementById('articleContent');
+
+      articleContent.addEventListener('dblclick', (e) => {
+        const selection = window.getSelection();
+        const word = selection.toString().trim().toLowerCase();
+        
+        if (word && word.length > 2) {
+          const definition = dictionary[word] || `Definition not found for "${word}". Try looking it up in a dictionary.`;
+          
+          tooltipWord.textContent = word.charAt(0).toUpperCase() + word.slice(1);
+          tooltipDef.textContent = definition;
+          
+          const rect = e.target.getBoundingClientRect();
+          tooltip.style.left = `${Math.min(e.clientX, window.innerWidth - 320)}px`;
+          tooltip.style.top = `${rect.bottom + 10 + window.scrollY}px`;
+          tooltip.classList.remove('hidden');
+          
+          setTimeout(() => tooltip.classList.add('hidden'), 5000);
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!tooltip.contains(e.target)) {
+          tooltip.classList.add('hidden');
+        }
+      });
+    }
+
+    // Text-to-Speech
+    function initializeTTS() {
+      let currentUtterance = null;
+      
+      document.querySelectorAll('.tts-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const paraNum = btn.dataset.para;
+          const text = document.querySelector(`.paragraph[data-para="${paraNum}"] .para-text`).textContent;
+          
+          // Cancel any existing speech
+          if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+          }
+          
+          // Toggle off if same paragraph
+          if (btn.textContent === '⏹️') {
+            btn.textContent = '🔊';
+            return;
+          }
+          
+          // Reset all buttons
+          document.querySelectorAll('.tts-btn').forEach(b => b.textContent = '🔊');
+          
+          // Start new speech
+          currentUtterance = new SpeechSynthesisUtterance(text);
+          currentUtterance.rate = 0.9;
+          
+          currentUtterance.onend = () => {
+            btn.textContent = '🔊';
+          };
+          
+          btn.textContent = '⏹️';
+          window.speechSynthesis.speak(currentUtterance);
+        });
+      });
+    }
+
+    // Accessibility Panel
+    function initializeAccessibility() {
+      const panel = document.getElementById('accessPanel');
+      const toggle = document.getElementById('accessToggle');
+      const ruler = document.getElementById('readingRuler');
+      
+      toggle.addEventListener('click', () => {
+        panel.classList.toggle('hidden');
+      });
+
+      // Dyslexia Font
+      document.getElementById('dyslexiaToggle').addEventListener('change', (e) => {
+        document.body.classList.toggle('dyslexia-font', e.target.checked);
+        localStorage.setItem('nightDyslexia', e.target.checked);
+      });
+
+      // High Contrast
+      document.getElementById('contrastToggle').addEventListener('change', (e) => {
+        document.body.classList.toggle('high-contrast', e.target.checked);
+        localStorage.setItem('nightContrast', e.target.checked);
+      });
+
+      // Reading Ruler
+      document.getElementById('rulerToggle').addEventListener('change', (e) => {
+        ruler.classList.toggle('active', e.target.checked);
+        localStorage.setItem('nightRuler', e.target.checked);
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (ruler.classList.contains('active')) {
+          ruler.style.top = `${e.clientY - 20}px`;
+        }
+      });
+
+      // Font Size
+      document.getElementById('fontMinus').addEventListener('click', () => {
+        if (currentFontSize > 12) {
+          currentFontSize -= 2;
+          updateFontSize();
+        }
+      });
+
+      document.getElementById('fontPlus').addEventListener('click', () => {
+        if (currentFontSize < 28) {
+          currentFontSize += 2;
+          updateFontSize();
+        }
+      });
+
+      // Load saved accessibility settings
+      if (localStorage.getItem('nightDyslexia') === 'true') {
+        document.getElementById('dyslexiaToggle').checked = true;
+        document.body.classList.add('dyslexia-font');
+      }
+      if (localStorage.getItem('nightContrast') === 'true') {
+        document.getElementById('contrastToggle').checked = true;
+        document.body.classList.add('high-contrast');
+      }
+      if (localStorage.getItem('nightRuler') === 'true') {
+        document.getElementById('rulerToggle').checked = true;
+        ruler.classList.add('active');
+      }
+      if (localStorage.getItem('nightFontSize')) {
+        currentFontSize = parseInt(localStorage.getItem('nightFontSize'));
+        updateFontSize();
+      }
+    }
+
+    function updateFontSize() {
+      document.querySelector('.article-text').style.fontSize = `${currentFontSize}px`;
+      document.getElementById('fontSizeDisplay').textContent = currentFontSize;
+      localStorage.setItem('nightFontSize', currentFontSize);
+    }
+
+    // Vocabulary Interactive
+    function initializeVocab() {
+      document.querySelectorAll('.vocab-choice').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const vocabNum = btn.dataset.vocab;
+          const isCorrect = btn.dataset.correct === 'true';
+          const feedbackDiv = document.getElementById(`vocabFeedback${vocabNum}`);
+          
+          // Disable all choices for this vocab
+          document.querySelectorAll(`.vocab-choice[data-vocab="${vocabNum}"]`).forEach(choice => {
+            choice.disabled = true;
+            choice.classList.add('opacity-50');
+          });
+          
+          // Style selected button
+          if (isCorrect) {
+            btn.classList.add('border-green-400', 'bg-green-900/50');
+            feedbackDiv.className = 'mt-3 p-3 rounded-lg bg-green-900/30 border border-green-500 text-green-300 vocab-feedback';
+            feedbackDiv.textContent = vocabFeedback[vocabNum].correct;
+          } else {
+            btn.classList.add('border-red-400', 'bg-red-900/50');
+            const letter = btn.textContent.charAt(0);
+            feedbackDiv.className = 'mt-3 p-3 rounded-lg bg-red-900/30 border border-red-500 text-red-300';
+            feedbackDiv.textContent = vocabFeedback[vocabNum].incorrect[letter];
+          }
+          
+          feedbackDiv.classList.remove('hidden');
+          localStorage.setItem(`nightVocab${vocabNum}`, btn.textContent);
+        });
+      });
+    }
+
+    // Progressive Hints
+    function initializeHints() {
+      document.querySelectorAll('.hint-btn').forEach(btn => {
+        const question = btn.dataset.question;
+        hintStates[question] = parseInt(localStorage.getItem(`nightHint${question}`) || '0');
+        
+        // Show already revealed hints
+        showHints(question);
+        
+        btn.addEventListener('click', () => {
+          if (hintStates[question] < 2) {
+            hintStates[question]++;
+            localStorage.setItem(`nightHint${question}`, hintStates[question]);
+            showHints(question);
+          }
+        });
+      });
+    }
+
+    function showHints(question) {
+      const hintsContainer = document.getElementById(`hints${question}`);
+      hintsContainer.innerHTML = '';
+      
+      for (let i = 0; i < hintStates[question]; i++) {
+        const hintDiv = document.createElement('div');
+        const hintData = hintsData[question][i];
+        hintDiv.className = 'p-3 bg-purple-900/50 rounded border border-purple-500 text-purple-200';
+        hintDiv.textContent = hintData.text;
+        hintsContainer.appendChild(hintDiv);
+      }
+    }
+
+    // Auto-expanding Textareas
+    function initializeTextareas() {
+      document.querySelectorAll('textarea').forEach(textarea => {
+        // Auto-expand function
+        const autoExpand = () => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        };
+        
+        textarea.addEventListener('input', () => {
+          autoExpand();
+          saveData();
+        });
+        
+        // Initial expand if has content
+        if (textarea.value) {
+          autoExpand();
+        }
+      });
+    }
+
+    // Save/Load Data
+    function saveData() {
+      document.querySelectorAll('[data-save]').forEach(el => {
+        const key = el.dataset.save;
+        localStorage.setItem(`night_${key}`, el.value);
+      });
+      document.getElementById('saveStatus').textContent = 'All progress auto-saved ✓';
+    }
+
+    function loadSavedData() {
+      document.querySelectorAll('[data-save]').forEach(el => {
+        const key = el.dataset.save;
+        const saved = localStorage.getItem(`night_${key}`);
+        if (saved) {
+          el.value = saved;
+        }
+      });
+    }
+
+    // Response TTS (Read Aloud)
+    function initializeResponseTTS() {
+      document.querySelectorAll('.tts-response-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const responseKey = btn.dataset.response;
+          const textarea = document.querySelector(`[data-save="${responseKey}"]`);
+          const responseText = textarea.value.trim();
+          
+          if (!responseText) {
+            const msg = document.createElement('div');
+            msg.className = 'fixed bottom-4 right-4 bg-yellow-600 text-white p-3 rounded-lg no-print';
+            msg.style.zIndex = '15002';
+            msg.textContent = '⚠️ Write a response first to hear it read aloud.';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 3000);
+            return;
+          }
+          
+          // Cancel any existing speech
+          if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+            btn.textContent = '🔊 Read Aloud';
+            return;
+          }
+          
+          const utterance = new SpeechSynthesisUtterance(responseText);
+          utterance.rate = 0.9;
+          
+          utterance.onend = () => {
+            btn.textContent = '🔊 Read Aloud';
+          };
+          
+          btn.textContent = '⏹️ Stop';
+          window.speechSynthesis.speak(utterance);
+        });
+      });
+    }
+
+    // Feedback Button
+    function initializeFeedback() {
+      document.querySelectorAll('.feedback-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const question = btn.dataset.question;
+          const textarea = document.querySelector(`[data-save="q${question}"]`);
+          const responseText = textarea.value.trim();
+          
+          if (!responseText) {
+            const msg = document.createElement('div');
+            msg.className = 'fixed bottom-4 right-4 bg-yellow-600 text-white p-3 rounded-lg no-print';
+            msg.style.zIndex = '15002';
+            msg.textContent = '⚠️ Write a response to receive feedback.';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 3000);
+            return;
+          }
+          
+          const feedbackDiv = document.getElementById(`feedback${question}`);
+          const feedbackMessages = {
+            1: "✅ Strong start! Does your response include specific evidence from the text? Consider adding the death march scene or his father's final moment.",
+            2: "✅ Good analysis! Make sure you explain HOW this conflict demonstrates the theme. What does his crisis reveal about the impact of extreme suffering?",
+            3: "✅ You've identified the issue. Now explain WHY people deny uncomfortable truths. Consider adding an example from modern times.",
+            4: "✅ Excellent use of the mirror metaphor! Can you connect this to his loss of faith or innocence discussed earlier in your response?",
+            5: "✅ Important perspective! Try to be more specific. Which lessons? Which prevention strategies? Provide concrete examples."
+          };
+          
+          feedbackDiv.textContent = feedbackMessages[question];
+          feedbackDiv.classList.remove('hidden');
+          
+          // Scroll to feedback
+          setTimeout(() => {
+            feedbackDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
+        });
+      });
+    }
+
+    // Revise Button
+    function initializeRevise() {
+      document.querySelectorAll('.revise-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const question = btn.dataset.question;
+          const textarea = document.querySelector(`[data-save="q${question}"]`);
+          
+          const reviseModal = document.createElement('div');
+          reviseModal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center no-print';
+          reviseModal.style.zIndex = '25000';
+          reviseModal.innerHTML = `
+            <div class="bg-gray-900 neon-border rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
+              <h3 class="text-cyan-400 font-bold text-lg mb-4" style="font-family: 'Orbitron', sans-serif;">📝 REVISE YOUR RESPONSE</h3>
+              <div class="mb-4">
+                <label class="text-cyan-300 block mb-2">Current Response:</label>
+                <div class="bg-gray-950 border border-cyan-700 rounded p-3 text-cyan-200 mb-4" style="max-height: 150px; overflow-y: auto;">
+                  ${textarea.value || '[No response yet]'}
+                </div>
+              </div>
+              <div class="mb-4">
+                <label class="text-cyan-300 block mb-2">Revised Response:</label>
+                <textarea id="reviseTextarea" class="cyber-input w-full p-3 rounded-lg resize-none" rows="6" placeholder="Write your revised response here..."></textarea>
+              </div>
+              <div class="flex gap-3 justify-end">
+                <button id="cancelRevise" class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">Cancel</button>
+                <button id="saveRevise" class="px-4 py-2 bg-green-600 rounded hover:bg-green-500">Save Revision</button>
+              </div>
+            </div>
+          `;
+          
+          document.body.appendChild(reviseModal);
+          
+          const reviseTextarea = document.getElementById('reviseTextarea');
+          reviseTextarea.focus();
+          reviseTextarea.value = textarea.value;
+          
+          document.getElementById('cancelRevise').addEventListener('click', () => {
+            reviseModal.remove();
+          });
+          
+          document.getElementById('saveRevise').addEventListener('click', () => {
+            textarea.value = reviseTextarea.value;
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
+            saveData();
+            
+            const msg = document.createElement('div');
+            msg.className = 'fixed bottom-4 right-4 bg-green-600 text-white p-3 rounded-lg no-print';
+            msg.style.zIndex = '25001';
+            msg.textContent = '✅ Response saved!';
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000);
+            
+            reviseModal.remove();
+          });
+        });
+      });
+    }
+
+    // Submit/Print Functions
+    function initializeSubmit() {
+      document.getElementById('submitBtn').addEventListener('click', () => {
+        // Create print boxes for all textareas
+        document.querySelectorAll('textarea').forEach(textarea => {
+          const printBox = document.createElement('div');
+          printBox.className = 'print-box';
+          printBox.textContent = textarea.value || '[No response]';
+          textarea.parentNode.insertBefore(printBox, textarea.nextSibling);
+        });
+        
+        // Print
+        window.print();
+        
+        // Cleanup
+        document.querySelectorAll('.print-box').forEach(box => box.remove());
+      });
+
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        const confirmClear = document.createElement('div');
+        confirmClear.className = 'fixed inset-0 bg-black/80 flex items-center justify-center';
+        confirmClear.style.zIndex = '25000';
+        confirmClear.innerHTML = `
+          <div class="bg-gray-900 neon-border p-6 rounded-lg max-w-sm text-center">
+            <p class="text-cyan-300 mb-4">⚠️ Are you sure you want to clear all responses?</p>
+            <div class="flex gap-3 justify-center">
+              <button id="confirmYes" class="px-4 py-2 bg-red-600 rounded hover:bg-red-500">Yes, Clear All</button>
+              <button id="confirmNo" class="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500">Cancel</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(confirmClear);
+        
+        document.getElementById('confirmYes').addEventListener('click', () => {
+          // Clear all saved data
+          Object.keys(localStorage).forEach(key => {
+            if (key.startsWith('night')) {
+              localStorage.removeItem(key);
+            }
+          });
+          location.reload();
+        });
+        
+        document.getElementById('confirmNo').addEventListener('click', () => {
+          confirmClear.remove();
+        });
+      });
+    }
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          // Apply config changes if needed
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.primary_color || defaultConfig.primary_color,
+              set: (value) => { config.primary_color = value; window.elementSdk.setConfig({ primary_color: value }); }
+            },
+            {
+              get: () => config.secondary_color || defaultConfig.secondary_color,
+              set: (value) => { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); }
+            },
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
+            },
+            {
+              get: () => config.text_color || defaultConfig.text_color,
+              set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
+            },
+            {
+              get: () => config.accent_color || defaultConfig.accent_color,
+              set: (value) => { config.accent_color = value; window.elementSdk.setConfig({ accent_color: value }); }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['article_title', config.article_title || defaultConfig.article_title],
+          ['teacher_name', config.teacher_name || defaultConfig.teacher_name]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d592e27f372cb91',t:'MTc3MjM3ODc4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
