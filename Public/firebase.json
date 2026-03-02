@@ -1,0 +1,8 @@
+{
+  "hosting": {
+    "ela.web.app": "ela",
+
+    "public": "public",
+    ...
+  }
+}
