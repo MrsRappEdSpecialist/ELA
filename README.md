@@ -1,1 +1,83 @@
 Mrs. Rapp EdSpecialist ELA Dashboard
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mrs. Rapp's Eduation Specialist Hub</title>
+    <style>
+        body {
+            background-color: #002b36;
+            color: #2aa198;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .hub-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 2px solid #00f3ff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+        h1 { color: #00f3ff; border-bottom: 2px solid #bc13fe; padding-bottom: 10px; }
+        p { color: #a0aec0; font-size: 1.1rem; }
+        .assignment-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+        .assignment-item {
+            margin: 15px 0;
+        }
+        .assignment-link {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            background: linear-gradient(90deg, #1a1c29, #2d3748);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #ff007f;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        .assignment-link:hover {
+            transform: scale(1.02);
+            background: #bc13fe;
+            border-left: 5px solid #00f3ff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hub-container">
+    <h1>Mrs. Rapp's ELA Dashboard</h1>
+    <p>Engaging Assignments Embedded with UDL Supports to Meet the Needs of Diverse Learners.</p>
+
+    <ul class="assignment-list">
+        <li class="assignment-item">
+            <a href="AOWCat.html" class="assignment-link">🎵 Article: Cat</a>
+        </li>
+
+          <li class="assignment-item">
+            <a href="night1" class="assignment-link"> Novel Study: Night 1</a>
+        </li>
+        
+        <li class="assignment-item">
+            <a href="article_of_week_music.html" class="assignment-link"> 🎵 Article 2: Stress Less, Listen More</a>
+        </li>
+        
+        <li class="assignment-item">
+            <a href="article_of_week_clean_space.html" class="assignment-link"> Article 3: Clean Space</a> 
+
+        <li class="assignment-item">
+            <a href="night1-9analysis.html" class="assignment-link"> Night 1-9 Analysis</a>
+        </li>
+            
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
