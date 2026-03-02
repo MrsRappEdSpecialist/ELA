@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
@@ -24,11 +23,11 @@ onAuthStateChanged(auth, (user) => {
   const welcomeMsg = document.getElementById('welcome-msg');
 
   if (user) {
-    // If student is logged in: Show the work, hide the login button
+    // If student is logged in: Show the ELA work, hide the login button
     if (loginSection) loginSection.style.display = 'none';
     if (studentContent) studentContent.style.display = 'block';
     if (welcomeMsg) welcomeMsg.innerText = "Welcome to ELA, " + user.displayName + "!";
-    console.log("Logged in as:", user.email);
+    console.log("Student is logged in:", user.email);
   } else {
     // If student is logged out: Show the login button, hide the work
     if (loginSection) loginSection.style.display = 'block';
@@ -36,11 +35,20 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Make buttons work globally
-window.login = () => signInWithPopup(auth, provider);
-window.logout = () => signOut(auth);
+// Setup Login/Logout functions so they can be called from buttons
+window.login = () => {
+    signInWithPopup(auth, provider)
+        .then((result) => console.log("Sign-in successful"))
+        .catch((error) => console.error("Sign-in error:", error));
+};
 
-// Helper to make the buttons clickable immediately
+window.logout = () => {
+    signOut(auth)
+        .then(() => console.log("Sign-out successful"))
+        .catch((error) => console.error("Sign-out error:", error));
+};
+
+// Helper to make buttons interactive immediately
 document.addEventListener('click', (e) => {
     if (e.target.id === 'login-btn') window.login();
     if (e.target.id === 'logout-btn') window.logout();
